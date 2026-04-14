@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iStore Stock — iPhone Kollektion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 'inter': ['Inter', 'sans-serif'] },
+          colors: {
+            apple: {
+              gray: '#1d1d1f',
+              light: '#f5f5f7',
+              blue: '#0071e3',
+              darkblue: '#0077ED',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #000; color: #fff; overflow-x: hidden; }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1d1d1f; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #666; }
+
+    /* Hero gradient animation */
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #1a1a2e 75%, #16213e 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    /* Floating particles */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+
+    /* Glow effect */
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(0,113,227,0.3); }
+      50% { box-shadow: 0 0 40px rgba(0,113,227,0.6), 0 0 80px rgba(0,113,227,0.2); }
+    }
+
+    .glow-btn { animation: glow 3s ease-in-out infinite; }
+
+    /* Card hover effect */
+    .product-card {
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-style: preserve-3d;
+    }
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0,113,227,0.15);
+    }
+    .product-card:hover .product-img {
+      transform: scale(1.08) rotate(-2deg);
+    }
+    .product-card:hover .card-overlay {
+      opacity: 1;
+    }
+    .product-card:hover .quick-actions {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .product-img {
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .card-overlay {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .quick-actions {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.1s;
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Filter pill */
+    .filter-pill {
+      transition: all 0.3s ease;
+    }
+    .filter-pill.active {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    .filter-pill:not(.active):hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* Marquee */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      animation: marquee 30s linear infinite;
+    }
+
+    /* Cart badge bounce */
+    @keyframes badgeBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+    }
+    .badge-bounce { animation: badgeBounce 0.4s ease; }
+
+    /* Shimmer effect */
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .shimmer {
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    /* Toast */
+    @keyframes slideInRight {
+      from { transform: translateX(120%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(120%); opacity: 0; }
+    }
+    .toast-enter { animation: slideInRight 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+    .toast-exit { animation: slideOutRight 0.3s ease forwards; }
+
+    /* Number counter */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stagger children */
+    .stagger-child:nth-child(1) { transition-delay: 0.05s; }
+    .stagger-child:nth-child(2) { transition-delay: 0.1s; }
+    .stagger-child:nth-child(3) { transition-delay: 0.15s; }
+    .stagger-child:nth-child(4) { transition-delay: 0.2s; }
+    .stagger-child:nth-child(5) { transition-delay: 0.25s; }
+    .stagger-child:nth-child(6) { transition-delay: 0.3s; }
+
+    /* Cart panel */
+    .cart-panel {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .cart-panel.open {
+      transform: translateX(0);
+    }
+    .cart-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .cart-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Nav blur */
+    .nav-blur {
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(0,0,0,0.72);
+    }
+
+    /* Price tag */
+    .price-tag {
+      background: linear-gradient(135deg, #0071e3, #00c6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Search */
+    .search-container {
+      transition: all 0.3s ease;
+    }
+    .search-container.expanded {
+      width: 300px;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .mobile-menu.open {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="font-inter">
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed top-24 right-4 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- Navigation -->
+  <nav class="nav-blur fixed top-0 left-0 right-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 cursor-pointer" onclick="scrollToTop()">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+            <i data-lucide="smartphone" class="w-4 h-4 text-white"></i>
+          </div>
+          <span class="text-lg font-bold tracking-tight">iStore<span class="text-blue-400">Stock</span></span>
+        </div>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#kollektion" class="text-sm text-gray-300 hover:text-white transition-colors">Kollektion</a>
+          <a href="#vorteile" class="text-sm text-gray-300 hover:text-white transition-colors">Vorteile</a>
+          <a href="#kontakt" class="text-sm text-gray-300 hover:text-white transition-colors">Kontakt</a>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Search (desktop) -->
+          <div class="hidden md:block relative">
+            <div id="search-container" class="search-container flex items-center bg-white/10 rounded-full overflow-hidden w-10 h-10 cursor-pointer" onclick="toggleSearch()">
+              <i data-lucide="search" class="w-4 h-4 text-gray-300 min-w-[16px] mx-auto search-icon"></i>
+              <input id="search-input" type="text" placeholder="iPhone suchen..." class="bg-transparent text-white text-sm outline-none w-0 opacity-0 transition-all search-field px-2" oninput="filterProducts(this.value)">
+            </div>
+          </div>
+
+          <!-- Cart -->
+          <button onclick="toggleCart()" class="relative w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 rounded-full text-[10px] font-bold flex items-center justify-center hidden">0</span>
+          </button>
+
+          <!-- Mobile menu toggle -->
+          <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+            <i data-lucide="menu" class="w-4 h-4" id="menu-icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="mobile-menu fixed inset-0 z-40 bg-black/95 backdrop-blur-xl pt-20 px-6">
+    <div class="flex flex-col gap-6">
+      <input type="text" placeholder="iPhone suchen..." class="bg-white/10 rounded-xl px-4 py-3 text-white outline-none text-lg md:hidden" oninput="filterProducts(this.value)">
+      <a href="#kollektion" onclick="toggleMobileMenu()" class="text-2xl font-semibold text-gray-300 hover:text-white transition-colors">Kollektion</a>
+      <a href="#vorteile" onclick="toggleMobileMenu()" class="text-2xl font-semibold text-gray-300 hover:text-white transition-colors">Vorteile</a>
+      <a href="#kontakt" onclick="toggleMobileMenu()" class="text-2xl font-semibold text-gray-300 hover:text-white transition-colors">Kontakt</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Particles -->
+    <div id="particles" class="absolute inset-0 pointer-events-none"></div>
+
+    <!-- Decorative circles -->
+    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8 border border-white/10">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        <span class="text-sm text-gray-300">Alle Modelle auf Lager</span>
+      </div>
+
+      <!-- Title -->
+      <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight mb-4 leading-[0.95]">
+        iPhone
+        <span class="block mt-2 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">Kollektion</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Von iPhone 13 bis iPhone 17 — alle Modelle auf Lager.<br class="hidden sm:block">
+        <span class="text-white font-medium">Kostenloser Versand</span> · Lieferung in 7 Werktagen
+      </p>
+
+      <!-- CTA -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#kollektion" class="glow-btn inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:scale-105">
+          <span>Kollektion entdecken</span>
+          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-8 mt-16 max-w-lg mx-auto">
+        <div>
+          <div class="text-3xl sm:text-4xl font-black" id="counter-1">0</div>
+          <div class="text-xs sm:text-sm text-gray-500 mt-1">Modelle</div>
+        </div>
+        <div>
+          <div class="text-3xl sm:text-4xl font-black" id="counter-2">0</div>
+          <div class="text-xs sm:text-sm text-gray-500 mt-1">Farben</div>
+        </div>
+        <div>
+          <div class="text-3xl sm:text-4xl font-black">0€</div>
+          <div class="text-xs sm:text-sm text-gray-500 mt-1">Versand</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500"></i>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="bg-white/5 border-y border-white/5 py-3 overflow-hidden">
+    <div class="marquee-track flex items-center gap-8 whitespace-nowrap">
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="truck" class="w-3 h-3"></i> Kostenloser Versand</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="shield-check" class="w-3 h-3"></i> 1 Jahr Garantie</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="refresh-cw" class="w-3 h-3"></i> 14 Tage Rückgabe</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="package-check" class="w-3 h-3"></i> Originalverpackung</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="truck" class="w-3 h-3"></i> Kostenloser Versand</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="shield-check" class="w-3 h-3"></i> 1 Jahr Garantie</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="refresh-cw" class="w-3 h-3"></i> 14 Tage Rückgabe</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="package-check" class="w-3 h-3"></i> Originalverpackung</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="truck" class="w-3 h-3"></i> Kostenloser Versand</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="shield-check" class="w-3 h-3"></i> 1 Jahr Garantie</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="refresh-cw" class="w-3 h-3"></i> 14 Tage Rückgabe</span>
+      <span class="text-gray-700">✦</span>
+      <span class="text-sm text-gray-500 flex items-center gap-2"><i data-lucide="package-check" class="w-3 h-3"></i> Originalverpackung</span>
+    </div>
+  </div>
+
+  <!-- Product Collection -->
+  <section id="kollektion" class="py-20 sm:py-28 bg-apple-gray min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">Die Kollektion</h2>
+        <p class="text-gray-500 text-lg">Finde dein perfektes iPhone — jetzt mit gratis Versand</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-12" id="filter-container">
+        <button class="filter-pill active px-5 py-2.5 rounded-full text-sm font-medium border border-white/10" data-filter="all" onclick="setFilter('all', this)">Alle</button>
+        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="13" onclick="setFilter('13', this)">iPhone 13</button>
+        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="14" onclick="setFilter('14', this)">iPhone 14</button>
+        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="15" onclick="setFilter('15', this)">iPhone 15</button>
+        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="16" onclick="setFilter('16', this)">iPhone 16</button>
+        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="17" onclick="setFilter('17', this)">iPhone 17</button>
+      </div>
+
+      <!-- Sort -->
+      <div class="flex items-center justify-between mb-8">
+        <span class="text-sm text-gray-500" id="product-count">19 Produkte</span>
+        <select id="sort-select" onchange="sortProducts(this.value)" class="bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 outline-none cursor-pointer">
+          <option value="default">Sortierung</option>
+          <option value="price-asc">Preis: Aufsteigend</option>
+          <option value="price-desc">Preis: Absteigend</option>
+          <option value="name-asc">Name: A-Z</option>
+          <option value="name-desc">Name: Z-A</option>
+        </select>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <!-- Products will be injected by JS -->
+      </div>
+
+      <!-- No results -->
+      <div id="no-results" class="hidden text-center py-20">
+        <i data-lucide="search-x" class="w-16 h-16 text-gray-600 mx-auto mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-400 mb-2">Keine Produkte gefunden</h3>
+        <p class="text-gray-600">Versuche einen anderen Suchbegriff oder Filter</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section id="vorteile" class="py-20 sm:py-28 bg-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">Warum iShop Stock?</h2>
+        <p class="text-gray-500 text-lg">Wir machen den iPhone-Kauf einfacher denn je</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="reveal group bg-white/5 rounded-2xl p-6 border border-white/5 hover:border-blue-500/30 transition-all duration-500 hover:bg-white/[0.07]">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="truck" class="w-5 h-5 text-blue-400"></i>
+          </div>
+          <h3 class="font-semibold mb-2">Kostenloser Versand</h3>
+          <p class="text-sm text-gray-500">Keine versteckten Kosten — Versand ist immer inklusive.</p>
+        </div>
+        <div class="reveal group bg-white/5 rounded-2xl p-6 border border-white/5 hover:border-purple-500/30 transition-all duration-500 hover:bg-white/[0.07]">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
+          </div>
+          <h3 class="font-semibold mb-2">1 Jahr Garantie</h3>
+          <p class="text-sm text-gray-500">Volle Herstellergarantie auf jedes Gerät.</p>
+        </div>
+        <div class="reveal group bg-white/5 rounded-2xl p-6 border border-white/5 hover:border-green-500/30 transition-all duration-500 hover:bg-white/[0.07]">
+          <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="package-check" class="w-5 h-5 text-green-400"></i>
+          </div>
+          <h3 class="font-semibold mb-2">Originalverpackung</h3>
+          <p class="text-sm text-gray-500">Neu und originalverpackt — direkt aus dem Lager.</p>
+        </div>
+        <div class="reveal group bg-white/5 rounded-2xl p-6 border border-white/5 hover:border-amber-500/30 transition-all duration-500 hover:bg-white/[0.07]">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <i data-lucide="zap" class="w-5 h-5 text-amber-400"></i>
+          </div>
+          <h3 class="font-semibold mb-2">Schnelle Lieferung</h3>
+          <p class="text-sm text-gray-500">Innerhalb von 7 Werktagen bei dir zu Hause.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter / CTA -->
+  <section id="kontakt" class="py-20 sm:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-purple-600/20"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl"></div>
+    <div class="relative max-w-3xl mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-6">Verpasse kein Update</h2>
+      <p class="text-gray-400 text-lg mb-10">Melde dich an und erhalte als Erster Zugang zu neuen Modellen und exklusiven Angeboten.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6">
+        <div class="flex items-center gap-2">
+          <i data-lucide="mail" class="w-4 h-4 text-blue-400"></i>
+          <a href="mailto:istore-stock@shop.com" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">istore-stock@shop.com</a>
+        </div>
+        <div class="flex items-center gap-2">
+          <i data-lucide="phone" class="w-4 h-4 text-blue-400"></i>
+          <a href="tel:+4915777255" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">015777255</a>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+        <input type="email" placeholder="Deine E-Mail-Adresse" class="flex-1 bg-white/10 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-blue-500/50 transition-colors">
+        <button onclick="subscribeEmail()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 whitespace-nowrap">
+          <span>Anmelden</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-gray-600 mt-4">Kein Spam. Jederzeit abbestellbar.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t border-white/5 bg-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+            <i data-lucide="smartphone" class="w-3 h-3 text-white"></i>
+          </div>
+          <span class="font-bold">iStore<span class="text-blue-400">Stock</span></span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-gray-500">
+          <a href="#" class="hover:text-white transition-colors">Impressum</a>
+          <a href="#" class="hover:text-white transition-colors">Datenschutz</a>
+          <a href="#" class="hover:text-white transition-colors">AGB</a>
+          <a href="mailto:istore-stock@shop.com" class="hover:text-white transition-colors flex items-center gap-1.5">
+            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+            istore-stock@shop.com
+          </a>
+          <a href="tel:+4915777255" class="hover:text-white transition-colors flex items-center gap-1.5">
+            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+            015777255
+          </a>
+        </div>
+        <div class="text-sm text-gray-600">© 2025 iStore Stock. Alle Rechte vorbehalten.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Panel Overlay -->
+  <div id="cart-overlay" class="cart-overlay fixed inset-0 bg-black/60 z-50" onclick="toggleCart()"></div>
+
+  <!-- Cart Panel -->
+  <div id="cart-panel" class="cart-panel fixed top-0 right-0 bottom-0 w-full max-w-md bg-[#1d1d1f] z-50 flex flex-col">
+    <div class="flex items-center justify-between p-6 border-b border-white/10">
+      <h3 class="text-xl font-bold flex items-center gap-2">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        Warenkorb
+      </h3>
+      <button onclick="toggleCart()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+      <div id="cart-empty" class="flex flex-col items-center justify-center h-full text-center">
+        <i data-lucide="shopping-bag" class="w-16 h-16 text-gray-700 mb-4"></i>
+        <p class="text-gray-500 font-medium">Dein Warenkorb ist leer</p>
+        <p class="text-sm text-gray-600 mt-1">Füge ein iPhone hinzu, um loszulegen</p>
+      </div>
+      <div id="cart-list" class="hidden flex flex-col gap-4"></div>
+    </div>
+    <div id="cart-footer" class="hidden border-t border-white/10 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-gray-400">Gesamt</span>
+        <span class="text-2xl font-bold" id="cart-total">€0,00</span>
+      </div>
+      <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2" onclick="checkout()">
+        <i data-lucide="credit-card" class="w-4 h-4"></i>
+        <span>Zur Kasse</span>
+      </button>
+      <p class="text-xs text-gray-600 text-center mt-3">Kostenloser Versand · Sichere Bezahlung</p>
+    </div>
+  </div>
+
+  <script>
+    // ===== PRODUCT DATA =====
+    const products = [
+      { id: '13mini', name: 'iPhone 13 Mini', series: '13',
+        colors: [
+          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Sternenlicht', hex: '#F0EDE0' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Pink', hex: '#F5C7C3' },
+          { name: 'Grün', hex: '#ACD0B0' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 420 },
+          { capacity: '256 GB', price: 475 },
+          { capacity: '512 GB', price: 510 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/b4e67e77a_generated_image.png'
+      },
+      { id: '13', name: 'iPhone 13', series: '13',
+        colors: [
+          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Sternenlicht', hex: '#F0EDE0' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Pink', hex: '#F5C7C3' },
+          { name: 'Grün', hex: '#ACD0B0' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 435 },
+          { capacity: '256 GB', price: 490 },
+          { capacity: '512 GB', price: 525 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/4bbefb701_generated_image.png'
+      },
+      { id: '13pro', name: 'iPhone 13 Pro', series: '13',
+        colors: [
+          { name: 'Graphit', hex: '#5A5A5E' },
+          { name: 'Gold', hex: '#E8D5A3' },
+          { name: 'Silber', hex: '#E3E3E8' },
+          { name: 'Sierrablau', hex: '#7EA4C0' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 490 },
+          { capacity: '256 GB', price: 545 },
+          { capacity: '512 GB', price: 580 },
+          { capacity: '1 TB', price: 615 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/e83a28edd_generated_image.png'
+      },
+      { id: '13promax', name: 'iPhone 13 Pro Max', series: '13',
+        colors: [
+          { name: 'Graphit', hex: '#5A5A5E' },
+          { name: 'Gold', hex: '#E8D5A3' },
+          { name: 'Silber', hex: '#E3E3E8' },
+          { name: 'Sierrablau', hex: '#7EA4C0' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 520 },
+          { capacity: '256 GB', price: 575 },
+          { capacity: '512 GB', price: 610 },
+          { capacity: '1 TB', price: 645 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/9da0d3f5c_generated_image.png'
+      },
+      { id: '14', name: 'iPhone 14', series: '14',
+        colors: [
+          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Sternenlicht', hex: '#F0EDE0' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Violett', hex: '#9B8EBD' },
+          { name: 'Gelb', hex: '#F5E279' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 440 },
+          { capacity: '256 GB', price: 495 },
+          { capacity: '512 GB', price: 530 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/9eb9372ac_generated_image.png'
+      },
+      { id: '14plus', name: 'iPhone 14 Plus', series: '14',
+        colors: [
+          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Sternenlicht', hex: '#F0EDE0' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Violett', hex: '#9B8EBD' },
+          { name: 'Gelb', hex: '#F5E279' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 520 },
+          { capacity: '256 GB', price: 575 },
+          { capacity: '512 GB', price: 610 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/484349515_generated_image.png'
+      },
+      { id: '14pro', name: 'iPhone 14 Pro', series: '14',
+        colors: [
+          { name: 'Space Schwarz', hex: '#2C2C34' },
+          { name: 'Silber', hex: '#E3E3E8' },
+          { name: 'Dunkellila', hex: '#5A4E6F' },
+          { name: 'Gold', hex: '#E8D5A3' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 570 },
+          { capacity: '256 GB', price: 625 },
+          { capacity: '512 GB', price: 660 },
+          { capacity: '1 TB', price: 695 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/b92c9f950_generated_image.png'
+      },
+      { id: '14promax', name: 'iPhone 14 Pro Max', series: '14',
+        colors: [
+          { name: 'Space Schwarz', hex: '#2C2C34' },
+          { name: 'Silber', hex: '#E3E3E8' },
+          { name: 'Dunkellila', hex: '#5A4E6F' },
+          { name: 'Gold', hex: '#E8D5A3' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 590 },
+          { capacity: '256 GB', price: 645 },
+          { capacity: '512 GB', price: 680 },
+          { capacity: '1 TB', price: 715 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/b807ff8a8_generated_image.png'
+      },
+      { id: '15', name: 'iPhone 15', series: '15',
+        colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Grün', hex: '#ACD0B0' },
+          { name: 'Gelb', hex: '#F5E279' },
+          { name: 'Pink', hex: '#F5C7C3' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 500 },
+          { capacity: '256 GB', price: 555 },
+          { capacity: '512 GB', price: 590 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/15bcb8448_generated_image.png'
+      },
+      { id: '15plus', name: 'iPhone 15 Plus', series: '15',
+        colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Grün', hex: '#ACD0B0' },
+          { name: 'Gelb', hex: '#F5E279' },
+          { name: 'Pink', hex: '#F5C7C3' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 600 },
+          { capacity: '256 GB', price: 655 },
+          { capacity: '512 GB', price: 690 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/86a9d1f71_generated_image.png'
+      },
+      { id: '15pro', name: 'iPhone 15 Pro', series: '15',
+        colors: [
+          { name: 'Titan Natur', hex: '#B8A98E' },
+          { name: 'Titan Blau', hex: '#7A8B9E' },
+          { name: 'Titan Weiß', hex: '#E5E0D8' },
+          { name: 'Titan Schwarz', hex: '#474749' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 680 },
+          { capacity: '256 GB', price: 735 },
+          { capacity: '512 GB', price: 770 },
+          { capacity: '1 TB', price: 805 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/e78fe0469_generated_image.png'
+      },
+      { id: '15promax', name: 'iPhone 15 Pro Max', series: '15',
+        colors: [
+          { name: 'Titan Natur', hex: '#B8A98E' },
+          { name: 'Titan Blau', hex: '#7A8B9E' },
+          { name: 'Titan Weiß', hex: '#E5E0D8' },
+          { name: 'Titan Schwarz', hex: '#474749' }
+        ],
+        storageOptions: [
+          { capacity: '256 GB', price: 810 },
+          { capacity: '512 GB', price: 865 },
+          { capacity: '1 TB', price: 900 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/420f6eb48_generated_image.png'
+      },
+      { id: '16', name: 'iPhone 16', series: '16',
+        colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Weiß', hex: '#F5F5F0' },
+          { name: 'Blaugrün', hex: '#6EC4BE' },
+          { name: 'Pink', hex: '#F5C7C3' },
+          { name: 'Ultramarin', hex: '#2C5090' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 615 },
+          { capacity: '256 GB', price: 670 },
+          { capacity: '512 GB', price: 705 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/b64f507dd_generated_image.png'
+      },
+      { id: '16plus', name: 'iPhone 16 Plus', series: '16',
+        colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Weiß', hex: '#F5F5F0' },
+          { name: 'Blaugrün', hex: '#6EC4BE' },
+          { name: 'Pink', hex: '#F5C7C3' },
+          { name: 'Ultramarin', hex: '#2C5090' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 750 },
+          { capacity: '256 GB', price: 805 },
+          { capacity: '512 GB', price: 840 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/7ba99c39c_generated_image.png'
+      },
+      { id: '16pro', name: 'iPhone 16 Pro', series: '16',
+        colors: [
+          { name: 'Wüstentitan', hex: '#C5B3A0' },
+          { name: 'Titansilber', hex: '#A8A8AB' },
+          { name: 'Weißtitan', hex: '#EAE5DB' },
+          { name: 'Schwarztitan', hex: '#3A3A3C' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 840 },
+          { capacity: '256 GB', price: 895 },
+          { capacity: '512 GB', price: 930 },
+          { capacity: '1 TB', price: 965 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/b64cb88cd_generated_image.png'
+      },
+      { id: '16promax', name: 'iPhone 16 Pro Max', series: '16',
+        colors: [
+          { name: 'Wüstentitan', hex: '#C5B3A0' },
+          { name: 'Titansilber', hex: '#A8A8AB' },
+          { name: 'Weißtitan', hex: '#EAE5DB' },
+          { name: 'Schwarztitan', hex: '#3A3A3C' }
+        ],
+        storageOptions: [
+          { capacity: '256 GB', price: 1040 },
+          { capacity: '512 GB', price: 1095 },
+          { capacity: '1 TB', price: 1130 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/64031f87d_generated_image.png'
+      },
+      { id: '17', name: 'iPhone 17', series: '17',
+        colors: [
+          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Sternenlicht', hex: '#F0EDE0' },
+          { name: 'Blau', hex: '#7B99BF' },
+          { name: 'Grün', hex: '#ACD0B0' },
+          { name: 'Pink', hex: '#F5C7C3' }
+        ],
+        storageOptions: [
+          { capacity: '128 GB', price: 720 },
+          { capacity: '256 GB', price: 775 },
+          { capacity: '512 GB', price: 810 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/a523791a3_generated_image.png'
+      },
+      { id: '17pro', name: 'iPhone 17 Pro', series: '17',
+        colors: [
+          { name: 'Titan Dunkel', hex: '#474749' },
+          { name: 'Titan Natur', hex: '#B8A98E' },
+          { name: 'Titan Weiß', hex: '#E5E0D8' }
+        ],
+        storageOptions: [
+          { capacity: '256 GB', price: 1080 },
+          { capacity: '512 GB', price: 1135 },
+          { capacity: '1 TB', price: 1170 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/265306b29_photo_2026-04-12_10-33-13.jpg'
+      },
+      { id: '17promax', name: 'iPhone 17 Pro Max', series: '17',
+        colors: [
+          { name: 'Titan Natur', hex: '#B8A98E' },
+          { name: 'Titan Dunkel', hex: '#474749' },
+          { name: 'Titan Weiß', hex: '#E5E0D8' }
+        ],
+        storageOptions: [
+          { capacity: '256 GB', price: 1150 },
+          { capacity: '512 GB', price: 1205 },
+          { capacity: '1 TB', price: 1240 }
+        ],
+        img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/8e597a72a_photo_2026-04-13_10-26-11.jpg'
+      },
+    ];
+
+    // ===== STATE =====
+    let currentFilter = 'all';
+    let currentSearch = '';
+    let currentSort = 'default';
+    let cart = [];
+
+    // ===== FORMAT PRICE =====
+    function formatPrice(price) {
+      return '€' + price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // ===== RENDER PRODUCTS =====
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const noResults = document.getElementById('no-results');
+      const countEl = document.getElementById('product-count');
+
+      let filtered = products.filter(p => {
+        const matchFilter = currentFilter === 'all' || p.series === currentFilter;
+        const matchSearch = currentSearch === '' || 
+          p.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+          p.colors.some(c => c.name.toLowerCase().includes(currentSearch.toLowerCase())) ||
+          p.storageOptions.some(s => s.capacity.toLowerCase().includes(currentSearch.toLowerCase()));
+        return matchFilter && matchSearch;
+      });
+
+      // Sort
+      if (currentSort === 'price-asc') filtered.sort((a, b) => a.storageOptions[0].price - b.storageOptions[0].price);
+      else if (currentSort === 'price-desc') filtered.sort((a, b) => b.storageOptions[0].price - a.storageOptions[0].price);
+      else if (currentSort === 'name-asc') filtered.sort((a, b) => a.name.localeCompare(b.name));
+      else if (currentSort === 'name-desc') filtered.sort((a, b) => b.name.localeCompare(a.name));
+
+      countEl.textContent = `${filtered.length} Produkt${filtered.length !== 1 ? 'e' : ''}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+
+      grid.innerHTML = filtered.map((p, i) => `
+        <div class="product-card reveal stagger-child rounded-2xl bg-white/[0.04] border border-white/[0.06] overflow-hidden cursor-pointer group" style="transition-delay: ${i * 0.05}s" onclick="showProductDetail('${p.id}')">
+          <div class="relative aspect-square bg-gradient-to-br from-white/[0.03] to-transparent p-6 flex items-center justify-center overflow-hidden">
+            <img src="${p.img}" alt="${p.name}" class="product-img w-full h-full object-contain drop-shadow-2xl" loading="lazy">
+            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end justify-center pb-4">
+              <div class="quick-actions flex items-center gap-2">
+                <button onclick="event.stopPropagation(); showProductDetail('${p.id}')" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                  In den Warenkorb
+                </button>
+              </div>
+            </div>
+            ${p.series === '17' ? '<span class="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Neu</span>' : ''}
+            ${p.storageOptions[0].price <= 450 ? '<span class="absolute top-3 right-3 bg-green-500/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">Angebot</span>' : ''}
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-sm mb-1.5">${p.name}</h3>
+            <div class="flex items-center gap-1 mb-2">
+              ${p.colors.map(c => `<div class="w-3.5 h-3.5 rounded-full border border-white/20 flex-shrink-0 cursor-pointer hover:scale-125 transition-transform" style="background-color:${c.hex}" title="${c.name}"></div>`).join('')}
+              <span class="text-[10px] text-gray-500 ml-1">${p.colors.length} Farben</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">ab ${p.storageOptions[0].capacity} · ${p.storageOptions.length} Optionen</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-baseline gap-1">
+                <span class="text-[10px] text-gray-500">ab</span>
+                <span class="price-tag text-lg font-bold">${formatPrice(p.storageOptions[0].price)}</span>
+              </div>
+              <button onclick="event.stopPropagation(); showProductDetail('${p.id}')" class="w-9 h-9 rounded-full bg-white/10 hover:bg-blue-500 flex items-center justify-center transition-all duration-300 group/btn">
+                <i data-lucide="plus" class="w-4 h-4 group-hover/btn:scale-110 transition-transform"></i>
+              </button>
+            </div>
+            <div class="flex items-center gap-1.5 mt-3">
+              <i data-lucide="truck" class="w-3 h-3 text-green-400"></i>
+              <span class="text-[11px] text-green-400">Kostenloser Versand</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+      observeReveal();
+    }
+
+    // ===== PRODUCT DETAIL MODAL =====
+    function showProductDetail(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+
+      const basePrice = p.storageOptions[0].price;
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+      modal.dataset.productId = p.id;
+      modal.dataset.selectedColor = p.colors[0].name;
+      modal.dataset.selectedStorage = p.storageOptions[0].capacity;
+      modal.dataset.selectedPrice = basePrice;
+
+      modal.innerHTML = `
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="this.parentElement.remove()"></div>
+        <div class="relative bg-[#1d1d1f] rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-white/10" style="animation: slideUp 0.4s cubic-bezier(0.23,1,0.32,1) forwards">
+          <style>
+            @keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+          </style>
+          <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+          <div class="aspect-square bg-gradient-to-br from-white/[0.03] to-transparent p-10 flex items-center justify-center">
+            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-contain drop-shadow-2xl">
+          </div>
+          <div class="p-6 pt-2">
+            ${p.series === '17' ? '<span class="inline-block bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3">Neu</span>' : ''}
+            <h2 class="text-2xl font-bold mb-4">${p.name}</h2>
+
+            <!-- Color Selection -->
+            <div class="mb-5">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs text-gray-400 uppercase tracking-wider">Farbe</span>
+                <span class="text-sm text-white font-medium color-name-display">${p.colors[0].name}</span>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap">
+                ${p.colors.map((c, ci) => `
+                  <button onclick="selectDetailColor(this, '${c.name.replace(/'/g, "\\'")}')" 
+                    class="w-9 h-9 rounded-full transition-all duration-200 flex-shrink-0 hover:scale-110 border-2 ${ci === 0 ? 'border-blue-500 ring-2 ring-blue-500/30 scale-110' : 'border-white/20 hover:border-white/40'}" 
+                    style="background-color:${c.hex}" title="${c.name}">
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Storage Selection -->
+            <div class="mb-6">
+              <span class="text-xs text-gray-400 uppercase tracking-wider mb-3 block">Speicher</span>
+              <div class="flex flex-wrap items-center gap-2">
+                ${p.storageOptions.map((s, si) => `
+                  <button onclick="selectDetailStorage(this, '${s.capacity}', ${s.price})" 
+                    class="storage-option flex flex-col items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${si === 0 ? 'bg-blue-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/15'}">
+                    <span class="font-semibold">${s.capacity}</span>
+                    <span class="text-[11px] ${si === 0 ? 'text-blue-200' : 'text-gray-500'}">${formatPrice(s.price)}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+              <span class="price-tag text-3xl font-black dynamic-price">${formatPrice(basePrice)}</span>
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="truck" class="w-4 h-4 text-green-400"></i>
+                <span class="text-sm text-green-400">Kostenloser Versand</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="flex items-center gap-1.5 bg-white/5 rounded-lg px-3 py-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i>
+                <span class="text-xs text-gray-400">1 Jahr Garantie</span>
+              </div>
+              <div class="flex items-center gap-1.5 bg-white/5 rounded-lg px-3 py-2">
+                <i data-lucide="package-check" class="w-4 h-4 text-purple-400"></i>
+                <span class="text-xs text-gray-400">Neu & OVP</span>
+              </div>
+              <div class="flex items-center gap-1.5 bg-white/5 rounded-lg px-3 py-2">
+                <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                <span class="text-xs text-gray-400">7 Tage</span>
+              </div>
+            </div>
+            <button onclick="addSelectedToCart(this)" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              In den Warenkorb — <span class="dynamic-price-btn">${formatPrice(basePrice)}</span>
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      lucide.createIcons();
+    }
+
+    function selectDetailColor(btn, colorName) {
+      const modal = btn.closest('.fixed');
+      modal.dataset.selectedColor = colorName;
+      btn.parentElement.querySelectorAll('button').forEach(b => {
+        b.classList.remove('border-blue-500', 'ring-2', 'ring-blue-500/30', 'scale-110');
+        b.classList.add('border-white/20');
+      });
+      btn.classList.remove('border-white/20');
+      btn.classList.add('border-blue-500', 'ring-2', 'ring-blue-500/30', 'scale-110');
+      const nameEl = btn.closest('.fixed').querySelector('.color-name-display');
+      if (nameEl) nameEl.textContent = colorName;
+    }
+
+    function selectDetailStorage(btn, capacity, price) {
+      const modal = btn.closest('.fixed');
+      modal.dataset.selectedStorage = capacity;
+      modal.dataset.selectedPrice = price;
+      btn.parentElement.querySelectorAll('.storage-option').forEach(b => {
+        b.classList.remove('bg-blue-500', 'text-white');
+        b.classList.add('bg-white/10', 'text-gray-300');
+        b.querySelector('span:last-child')?.classList.remove('text-blue-200');
+        b.querySelector('span:last-child')?.classList.add('text-gray-500');
+      });
+      btn.classList.remove('bg-white/10', 'text-gray-300');
+      btn.classList.add('bg-blue-500', 'text-white');
+      btn.querySelector('span:last-child')?.classList.remove('text-gray-500');
+      btn.querySelector('span:last-child')?.classList.add('text-blue-200');
+      const priceEls = modal.querySelectorAll('.dynamic-price, .dynamic-price-btn');
+      priceEls.forEach(el => el.textContent = formatPrice(price));
+    }
+
+    function addSelectedToCart(btn) {
+      const modal = btn.closest('.fixed');
+      const productId = modal.dataset.productId;
+      const selectedColor = modal.dataset.selectedColor;
+      const selectedStorage = modal.dataset.selectedStorage;
+      const unitPrice = parseFloat(modal.dataset.selectedPrice);
+
+      const existing = cart.find(item => item.id === productId && item.selectedColor === selectedColor && item.selectedStorage === selectedStorage);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ id: productId, selectedColor, selectedStorage, unitPrice, qty: 1 });
+      }
+      updateCartUI();
+      modal.remove();
+      showToast(products.find(p => p.id === productId).name + ' hinzugefügt');
+    }
+
+    // ===== FILTER & SORT =====
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(p => {
+        p.classList.remove('active');
+        p.classList.add('text-gray-400');
+      });
+      el.classList.add('active');
+      el.classList.remove('text-gray-400');
+      renderProducts();
+    }
+
+    function filterProducts(query) {
+      currentSearch = query;
+      renderProducts();
+    }
+
+    function sortProducts(value) {
+      currentSort = value;
+      renderProducts();
+    }
+
+    // ===== CART =====
+    function removeFromCart(cartIndex) {
+      cart.splice(cartIndex, 1);
+      updateCartUI();
+    }
+
+    function changeQty(cartIndex, delta) {
+      const item = cart[cartIndex];
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        removeFromCart(cartIndex);
+        return;
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const totalCount = cart.reduce((s, i) => s + i.qty, 0);
+      const totalPrice = cart.reduce((s, i) => s + i.unitPrice * i.qty, 0);
+
+      if (totalCount > 0) {
+        badge.classList.remove('hidden');
+        badge.textContent = totalCount;
+        badge.classList.add('badge-bounce');
+        setTimeout(() => badge.classList.remove('badge-bounce'), 400);
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      const cartEmpty = document.getElementById('cart-empty');
+      const cartList = document.getElementById('cart-list');
+      const cartFooter = document.getElementById('cart-footer');
+      const cartTotal = document.getElementById('cart-total');
+
+      if (cart.length === 0) {
+        cartEmpty.classList.remove('hidden');
+        cartList.classList.add('hidden');
+        cartFooter.classList.add('hidden');
+      } else {
+        cartEmpty.classList.add('hidden');
+        cartList.classList.remove('hidden');
+        cartFooter.classList.remove('hidden');
+
+        cartList.innerHTML = cart.map((item, idx) => {
+          const p = products.find(x => x.id === item.id);
+          const colorHex = p.colors.find(c => c.name === item.selectedColor)?.hex || '#888';
+          return `
+            <div class="flex items-center gap-4 bg-white/5 rounded-xl p-3 border border-white/5">
+              <img src="${p.img}" alt="${p.name}" class="w-16 h-16 object-contain rounded-lg bg-white/5">
+              <div class="flex-1 min-w-0">
+                <h4 class="font-semibold text-sm truncate">${p.name}</h4>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <div class="w-3 h-3 rounded-full border border-white/20 flex-shrink-0" style="background-color:${colorHex}"></div>
+                  <p class="text-xs text-gray-500">${item.selectedStorage} · ${item.selectedColor}</p>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                  <button onclick="changeQty(${idx}, -1)" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-xs">−</button>
+                  <span class="text-sm font-medium w-6 text-center">${item.qty}</span>
+                  <button onclick="changeQty(${idx}, 1)" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-xs">+</button>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="font-bold text-sm">${formatPrice(item.unitPrice * item.qty)}</span>
+                <button onclick="removeFromCart(${idx})" class="block mt-2 text-gray-600 hover:text-red-400 transition-colors">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        cartTotal.textContent = formatPrice(totalPrice);
+        lucide.createIcons();
+      }
+    }
+
+    function toggleCart() {
+      const panel = document.getElementById('cart-panel');
+      const overlay = document.getElementById('cart-overlay');
+      panel.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+
+    function checkout() {
+      if (cart.length === 0) return;
+      toggleCart();
+      showCheckoutForm();
+    }
+
+    function showCheckoutForm() {
+      const total = cart.reduce((s, i) => s + i.unitPrice * i.qty, 0);
+      const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+
+      const modal = document.createElement('div');
+      modal.id = 'checkout-modal';
+      modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4';
+      modal.innerHTML = `
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeCheckoutModal()"></div>
+        <div class="relative bg-[#1d1d1f] rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-white/10" style="animation: slideUp 0.4s cubic-bezier(0.23,1,0.32,1) forwards">
+          <div class="p-6 sm:p-8">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-2xl font-bold flex items-center gap-2">
+                <i data-lucide="credit-card" class="w-6 h-6 text-blue-400"></i>
+                Bestellung abschließen
+              </h2>
+              <button onclick="closeCheckoutModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- Order Summary Mini -->
+            <div class="bg-white/5 rounded-xl p-4 mb-6 border border-white/5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-gray-400">${totalItems} Artikel</span>
+                <span class="text-lg font-bold price-tag">${formatPrice(total)}</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                ${cart.map(item => {
+                  const p = products.find(x => x.id === item.id);
+                  return `<div class="flex items-center justify-between text-xs text-gray-500">
+                    <span>${p.name} (${item.selectedStorage}, ${item.selectedColor}) ${item.qty > 1 ? '× ' + item.qty : ''}</span>
+                    <span>${formatPrice(item.unitPrice * item.qty)}</span>
+                  </div>`;
+                }).join('')}
+              </div>
+              <div class="flex items-center gap-1.5 mt-2 pt-2 border-t border-white/5">
+                <i data-lucide="truck" class="w-3 h-3 text-green-400"></i>
+                <span class="text-xs text-green-400">Kostenloser Versand</span>
+              </div>
+            </div>
+
+            <!-- Step indicator -->
+            <div class="flex items-center gap-2 mb-6" id="step-indicator">
+              <div class="step-dot active flex items-center gap-2" data-step="1">
+                <div class="w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold">1</div>
+                <span class="text-xs font-medium text-white">Daten</span>
+              </div>
+              <div class="flex-1 h-px bg-white/10"></div>
+              <div class="step-dot flex items-center gap-2" data-step="2">
+                <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-500">2</div>
+                <span class="text-xs font-medium text-gray-500">Zahlung</span>
+              </div>
+              <div class="flex-1 h-px bg-white/10"></div>
+              <div class="step-dot flex items-center gap-2" data-step="3">
+                <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-500">3</div>
+                <span class="text-xs font-medium text-gray-500">Fertig</span>
+              </div>
+            </div>
+
+            <!-- Step 1: Buyer Info -->
+            <div id="checkout-step-1">
+              <h3 class="font-semibold mb-4 text-lg">Persönliche Daten</h3>
+              <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs text-gray-400 mb-1 block">Vorname *</label>
+                    <input id="checkout-firstname" type="text" placeholder="Max" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors" required>
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-400 mb-1 block">Nachname *</label>
+                    <input id="checkout-lastname" type="text" placeholder="Mustermann" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors" required>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-xs text-gray-400 mb-1 block">Straße und Hausnummer *</label>
+                  <input id="checkout-street" type="text" placeholder="Musterstraße 1" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors" required>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                  <div class="col-span-1">
+                    <label class="text-xs text-gray-400 mb-1 block">PLZ *</label>
+                    <input id="checkout-zip" type="text" placeholder="12345" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors" required>
+                  </div>
+                  <div class="col-span-2">
+                    <label class="text-xs text-gray-400 mb-1 block">Stadt *</label>
+                    <input id="checkout-city" type="text" placeholder="Berlin" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors" required>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-xs text-gray-400 mb-1 block">E-Mail-Adresse * <span class="text-gray-600">(für Rechnung)</span></label>
+                  <input id="checkout-email" type="email" placeholder="max@beispiel.de" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors" required>
+                </div>
+                <div>
+                  <label class="text-xs text-gray-400 mb-1 block">Telefon <span class="text-gray-600">(optional)</span></label>
+                  <input id="checkout-phone" type="tel" placeholder="+49 123 456789" class="w-full bg-white/10 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-blue-500/50 transition-colors">
+                </div>
+              </div>
+              <p id="step1-error" class="text-red-400 text-xs mt-3 hidden">Bitte fülle alle Pflichtfelder aus.</p>
+              <button onclick="goToStep2()" class="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2">
+                <span>Weiter zur Zahlung</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- Step 2: Payment Info -->
+            <div id="checkout-step-2" class="hidden">
+              <h3 class="font-semibold mb-2 text-lg">Zahlungsinformationen</h3>
+              <p class="text-sm text-gray-400 mb-6">Bitte überweise den Gesamtbetrag an folgende Bankverbindung:</p>
+
+              <div class="bg-white/5 rounded-2xl p-5 border border-white/10 mb-6 space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Empfänger</span>
+                  <button onclick="copyToClipboard('iShopStock Gewerbe r.', this)" class="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
+                    <i data-lucide="copy" class="w-3 h-3"></i> Kopieren
+                  </button>
+                </div>
+                <p class="font-bold text-lg" id="payment-recipient">iStoreStock Gewerbe r.</p>
+
+                <div class="h-px bg-white/5"></div>
+
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">IBAN</span>
+                  <div class="flex items-center justify-between mt-1">
+                    <p class="font-mono font-semibold text-base tracking-wide" id="payment-iban">DE69506700240060350605</p>
+                    <button onclick="copyToClipboard('DE69506700240060350605', this)" class="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
+                      <i data-lucide="copy" class="w-3 h-3"></i> Kopieren
+                    </button>
+                  </div>
+                </div>
+
+                <div class="h-px bg-white/5"></div>
+
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Verwendungszweck</span>
+                  <div class="flex items-center justify-between mt-1">
+                    <p class="font-mono font-bold text-base text-amber-400" id="payment-code">HL855219012T</p>
+                    <button onclick="copyToClipboard('HL855219012T', this)" class="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
+                      <i data-lucide="copy" class="w-3 h-3"></i> Kopieren
+                    </button>
+                  </div>
+                </div>
+
+                <div class="h-px bg-white/5"></div>
+
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Betrag</span>
+                  <p class="font-black text-2xl price-tag mt-1">${formatPrice(total)}</p>
+                </div>
+              </div>
+
+              <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs text-amber-200/80 leading-relaxed">
+                  <strong>Wichtig:</strong> Bitte überweise den Betrag an <strong class="text-amber-400">iStoreStock Gewerbe r.</strong> und verwende den Code <strong class="text-amber-400 font-mono">HL855219012T</strong> als Verwendungszweck. Ohne diesen Code kann die Zahlung nicht zugeordnet werden.
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 mb-6">
+                <input type="checkbox" id="payment-confirm" class="w-4 h-4 rounded accent-blue-500">
+                <label for="payment-confirm" class="text-sm text-gray-400">Ich bestätige, dass ich die Überweisung durchgeführt habe</label>
+              </div>
+
+              <div class="flex gap-3">
+                <button onclick="goBackToStep1()" class="flex-1 bg-white/10 hover:bg-white/15 text-white font-semibold py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+                  <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                  <span>Zurück</span>
+                </button>
+                <button onclick="goToStep3()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2">
+                  <span>Bestellung bestätigen</span>
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div id="checkout-step-3" class="hidden">
+              <div class="text-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
+                  <i data-lucide="check-circle" class="w-10 h-10 text-green-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Bestellung aufgegeben!</h3>
+                <p class="text-gray-400 text-sm">Vielen Dank für deine Bestellung, <span id="confirm-name" class="text-white font-medium"></span>!</p>
+              </div>
+
+              <div class="bg-white/5 rounded-2xl p-5 border border-white/10 mb-6 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Bestellnummer</span>
+                  <span class="font-mono font-bold text-blue-400" id="order-number"></span>
+                </div>
+                <div class="h-px bg-white/5"></div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Lieferadresse</span>
+                  <p class="text-sm mt-1" id="confirm-address"></p>
+                </div>
+                <div class="h-px bg-white/5"></div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Rechnung an</span>
+                  <p class="text-sm mt-1" id="confirm-email"></p>
+                </div>
+              </div>
+
+              <!-- Receipt -->
+              <div class="bg-white/5 rounded-2xl p-5 border border-white/10 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="font-semibold text-sm">Rechnung</h4>
+                  <span class="text-[10px] text-gray-500 bg-white/5 px-2 py-1 rounded-full">Rechnung per E-Mail</span>
+                </div>
+                <div class="space-y-2">
+                  ${cart.map(item => {
+                    const p = products.find(x => x.id === item.id);
+                    const colorHex = p.colors.find(c => c.name === item.selectedColor)?.hex || '#888';
+                    return `<div class="flex items-center gap-3">
+                      <img src="${p.img}" alt="${p.name}" class="w-10 h-10 object-contain bg-white/5 rounded-lg p-1">
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium truncate">${p.name}</p>
+                        <div class="flex items-center gap-1.5">
+                          <div class="w-2.5 h-2.5 rounded-full border border-white/20 flex-shrink-0" style="background-color:${colorHex}"></div>
+                          <p class="text-[11px] text-gray-500">${item.selectedStorage} · ${item.selectedColor} ${item.qty > 1 ? '× ' + item.qty : ''}</p>
+                        </div>
+                      </div>
+                      <span class="text-sm font-semibold">${formatPrice(item.unitPrice * item.qty)}</span>
+                    </div>`;
+                  }).join('')}
+                </div>
+                <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                  <span class="font-semibold">Gesamt</span>
+                  <span class="font-black text-xl price-tag">${formatPrice(total)}</span>
+                </div>
+              </div>
+
+              <!-- Delivery Info -->
+              <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <i data-lucide="truck" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs text-blue-200/80 leading-relaxed">
+                  Deine Bestellung wird innerhalb von <strong class="text-blue-300">7 Werktagen</strong> an die angegebene Adresse geliefert. Versand über <strong class="text-blue-300">DHL</strong>, <strong class="text-blue-300">Hermes</strong> oder <strong class="text-blue-300">DPD</strong>.
+                </div>
+              </div>
+
+              <!-- Email confirmation note -->
+              <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <i data-lucide="mail-check" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs text-green-200/80 leading-relaxed">
+                  Eine Bestellbestätigung mit der Rechnung wurde an <strong class="text-green-300" id="confirm-email-receipt"></strong> gesendet.
+                </div>
+              </div>
+
+              <button onclick="closeCheckoutModal()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2">
+                <i data-lucide="home" class="w-4 h-4"></i>
+                <span>Zurück zum Shop</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      lucide.createIcons();
+    }
+
+    function goToStep2() {
+      const firstname = document.getElementById('checkout-firstname').value.trim();
+      const lastname = document.getElementById('checkout-lastname').value.trim();
+      const street = document.getElementById('checkout-street').value.trim();
+      const zip = document.getElementById('checkout-zip').value.trim();
+      const city = document.getElementById('checkout-city').value.trim();
+      const email = document.getElementById('checkout-email').value.trim();
+
+      if (!firstname || !lastname || !street || !zip || !city || !email || !email.includes('@')) {
+        document.getElementById('step1-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('step1-error').classList.add('hidden');
+      document.getElementById('checkout-step-1').classList.add('hidden');
+      document.getElementById('checkout-step-2').classList.remove('hidden');
+      updateStepIndicator(2);
+    }
+
+    function goBackToStep1() {
+      document.getElementById('checkout-step-2').classList.add('hidden');
+      document.getElementById('checkout-step-1').classList.remove('hidden');
+      updateStepIndicator(1);
+    }
+
+    function goToStep3() {
+      const confirm = document.getElementById('payment-confirm');
+      if (!confirm || !confirm.checked) {
+        showToast('Bitte bestätige die Überweisung', 'info');
+        return;
+      }
+
+      const firstname = document.getElementById('checkout-firstname').value.trim();
+      const lastname = document.getElementById('checkout-lastname').value.trim();
+      const street = document.getElementById('checkout-street').value.trim();
+      const zip = document.getElementById('checkout-zip').value.trim();
+      const city = document.getElementById('checkout-city').value.trim();
+      const email = document.getElementById('checkout-email').value.trim();
+
+      const orderNum = 'IS-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+
+      document.getElementById('order-number').textContent = orderNum;
+      document.getElementById('confirm-name').textContent = firstname + ' ' + lastname;
+      document.getElementById('confirm-address').innerHTML = firstname + ' ' + lastname + '<br>' + street + '<br>' + zip + ' ' + city;
+      document.getElementById('confirm-email').textContent = email;
+      document.getElementById('confirm-email-receipt').textContent = email;
+
+      document.getElementById('checkout-step-2').classList.add('hidden');
+      document.getElementById('checkout-step-3').classList.remove('hidden');
+      updateStepIndicator(3);
+
+      // Clear cart
+      cart = [];
+      updateCartUI();
+      showToast('Bestellung erfolgreich aufgegeben!', 'success');
+    }
+
+    function updateStepIndicator(step) {
+      document.querySelectorAll('.step-dot').forEach(dot => {
+        const s = parseInt(dot.dataset.step);
+        const circle = dot.querySelector('div');
+        const label = dot.querySelector('span');
+        if (s <= step) {
+          circle.className = 'w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold';
+          label.className = 'text-xs font-medium text-white';
+        } else {
+          circle.className = 'w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-500';
+          label.className = 'text-xs font-medium text-gray-500';
+        }
+      });
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      if (modal) modal.remove();
+    }
+
+    function copyToClipboard(text, btn) {
+      const orderNum = 'IS-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+      navigator.clipboard.writeText(text).then(() => {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Kopiert!';
+        btn.classList.add('text-green-400');
+        lucide.createIcons();
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.classList.remove('text-green-400');
+          lucide.createIcons();
+        }, 2000);
+      }).catch(() => {
+        // Fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast('Kopiert!', 'success');
+      });
+    }
+
+    // ===== TOAST =====
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const iconName = type === 'success' ? 'check-circle' : 'shopping-bag';
+      const bgColor = type === 'success' ? 'from-green-500 to-emerald-600' : 'from-blue-500 to-blue-600';
+      toast.className = 'pointer-events-auto toast-enter flex items-center gap-3 bg-[#1d1d1f] border border-white/10 rounded-xl px-4 py-3 shadow-2xl max-w-xs';
+      toast.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br ${bgColor} flex items-center justify-center flex-shrink-0">
+          <i data-lucide="${iconName}" class="w-4 h-4 text-white"></i>
+        </div>
+        <span class="text-sm font-medium">${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => {
+        toast.classList.remove('toast-enter');
+        toast.classList.add('toast-exit');
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // ===== SEARCH =====
+    function toggleSearch() {
+      const container = document.getElementById('search-container');
+      const input = document.getElementById('search-input');
+      const isExpanded = container.classList.contains('expanded');
+
+      if (isExpanded) {
+        container.classList.remove('expanded');
+        input.style.width = '0';
+        input.style.opacity = '0';
+        if (input.value === '') currentSearch = '';
+        input.value = '';
+        renderProducts();
+      } else {
+        container.classList.add('expanded');
+        input.style.width = '200px';
+        input.style.opacity = '1';
+        input.focus();
+      }
+    }
+
+    // ===== MOBILE MENU =====
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('open');
+    }
+
+    // ===== SCROLL TO TOP =====
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== INTERSECTION OBSERVER =====
+    function observeReveal() {
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    }
+
+    // ===== PARTICLES =====
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particle.style.animationDelay = (Math.random() * 10) + 's';
+        particle.style.width = (Math.random() * 4 + 2) + 'px';
+        particle.style.height = particle.style.width;
+        container.appendChild(particle);
+      }
+    }
+
+    // ===== COUNTER ANIMATION =====
+    function animateCounter(id, target, suffix = '') {
+      const el = document.getElementById(id);
+      let current = 0;
+      const step = target / 40;
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(interval);
+        }
+        el.textContent = Math.floor(current) + suffix;
+      }, 30);
+    }
+
+    // ===== SUBSCRIBE =====
+    function subscribeEmail() {
+      const input = document.querySelector('input[type="email"]');
+      if (input && input.value.includes('@')) {
+        showToast('Erfolgreich angemeldet!', 'success');
+        input.value = '';
+      } else {
+        showToast('Bitte gib eine gültige E-Mail ein');
+      }
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      createParticles();
+      renderProducts();
+      observeReveal();
+
+      // Animate counters when hero is visible
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter('counter-1', 19);
+            animateCounter('counter-2', 26);
+            heroObserver.disconnect();
+          }
+        });
+      });
+      heroObserver.observe(document.getElementById('counter-1'));
+    });
+  </script>
+<script src="https://deepsite.hf.co/deepsite-badge.js"></script>
+</body>
+</html>
