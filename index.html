@@ -6,6 +6,7 @@
   <title>iStore Stock — iPhone Kollektion</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="data.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -309,17 +310,17 @@
       <!-- Badge -->
       <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8 border border-white/10">
         <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-        <span class="text-sm text-gray-300">Alle Modelle auf Lager</span>
+        <span class="text-sm text-gray-300" id="site-badge-text">Alle Modelle auf Lager</span>
       </div>
 
       <!-- Title -->
       <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight mb-4 leading-[0.95]">
-        iPhone
-        <span class="block mt-2 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent">Kollektion</span>
+        <span id="site-hero-title1">iPhone</span>
+        <span class="block mt-2 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 bg-clip-text text-transparent" id="site-hero-title2">Kollektion</span>
       </h1>
 
       <!-- Subtitle -->
-      <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+      <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed" id="site-hero-desc">
         Von iPhone 13 bis iPhone 17 — alle Modelle auf Lager.<br class="hidden sm:block">
         <span class="text-white font-medium">Kostenloser Versand</span> · Lieferung in 7 Werktagen
       </p>
@@ -389,18 +390,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Section Header -->
       <div class="text-center mb-12">
-        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">Die Kollektion</h2>
-        <p class="text-gray-500 text-lg">Finde dein perfektes iPhone — jetzt mit gratis Versand</p>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4" id="site-section-title">Die Kollektion</h2>
+        <p class="text-gray-500 text-lg" id="site-section-desc">Finde dein perfektes iPhone — jetzt mit gratis Versand</p>
       </div>
 
       <!-- Filters -->
       <div class="flex flex-wrap items-center justify-center gap-2 mb-12" id="filter-container">
-        <button class="filter-pill active px-5 py-2.5 rounded-full text-sm font-medium border border-white/10" data-filter="all" onclick="setFilter('all', this)">Alle</button>
-        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="13" onclick="setFilter('13', this)">iPhone 13</button>
-        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="14" onclick="setFilter('14', this)">iPhone 14</button>
-        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="15" onclick="setFilter('15', this)">iPhone 15</button>
-        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="16" onclick="setFilter('16', this)">iPhone 16</button>
-        <button class="filter-pill px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 text-gray-400" data-filter="17" onclick="setFilter('17', this)">iPhone 17</button>
+        <!-- Filter pills werden dynamisch generiert -->
       </div>
 
       <!-- Sort -->
@@ -433,8 +429,8 @@
   <section id="vorteile" class="py-20 sm:py-28 bg-black">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
-        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">Warum iShop Stock?</h2>
-        <p class="text-gray-500 text-lg">Wir machen den iPhone-Kauf einfacher denn je</p>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-4" id="site-benefits-title">Warum iShop Stock?</h2>
+        <p class="text-gray-500 text-lg" id="site-benefits-desc">Wir machen den iPhone-Kauf einfacher denn je</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="reveal group bg-white/5 rounded-2xl p-6 border border-white/5 hover:border-blue-500/30 transition-all duration-500 hover:bg-white/[0.07]">
@@ -474,16 +470,16 @@
     <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-purple-600/20"></div>
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl"></div>
     <div class="relative max-w-3xl mx-auto px-4 text-center">
-      <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-6">Verpasse kein Update</h2>
-      <p class="text-gray-400 text-lg mb-10">Melde dich an und erhalte als Erster Zugang zu neuen Modellen und exklusiven Angeboten.</p>
+      <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-6" id="site-cta-title">Verpasse kein Update</h2>
+      <p class="text-gray-400 text-lg mb-10" id="site-cta-desc">Melde dich an und erhalte als Erster Zugang zu neuen Modellen und exklusiven Angeboten.</p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6">
         <div class="flex items-center gap-2">
           <i data-lucide="mail" class="w-4 h-4 text-blue-400"></i>
-          <a href="mailto:istore-stock@shop.com" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">istore-stock@shop.com</a>
+          <a href="mailto:istore-stock@shop.com" class="text-blue-400 hover:text-blue-300 transition-colors font-medium site-contact-email">istore-stock@shop.com</a>
         </div>
         <div class="flex items-center gap-2">
           <i data-lucide="phone" class="w-4 h-4 text-blue-400"></i>
-          <a href="tel:+4915777255" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">015777255</a>
+          <a href="tel:+4915777255" class="text-blue-400 hover:text-blue-300 transition-colors font-medium site-contact-phone">015777255</a>
         </div>
       </div>
       <div class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
@@ -511,16 +507,20 @@
           <a href="#" class="hover:text-white transition-colors">Impressum</a>
           <a href="#" class="hover:text-white transition-colors">Datenschutz</a>
           <a href="#" class="hover:text-white transition-colors">AGB</a>
-          <a href="mailto:istore-stock@shop.com" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <a href="mailto:istore-stock@shop.com" class="hover:text-white transition-colors flex items-center gap-1.5 site-contact-email">
             <i data-lucide="mail" class="w-3.5 h-3.5"></i>
             istore-stock@shop.com
           </a>
-          <a href="tel:+4915777255" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <a href="tel:+4915777255" class="hover:text-white transition-colors flex items-center gap-1.5 site-contact-phone">
             <i data-lucide="phone" class="w-3.5 h-3.5"></i>
             015777255
           </a>
+          
         </div>
-        <div class="text-sm text-gray-600">© 2025 iStore Stock. Alle Rechte vorbehalten.</div>
+        <div class="text-sm text-gray-600" id="site-footer-copyright">© 2025 iStore Stock. Alle Rechte vorbehalten.</div>
+        <button id="sentry-btn" onclick="sentryChallenge()" style="width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:rgba(255,255,255,0.08);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;flex-shrink:0;" onmouseenter="this.style.color='rgba(255,255,255,0.35)';this.style.borderColor='rgba(255,255,255,0.15)';this.style.background='rgba(255,255,255,0.06)'" onmouseleave="this.style.color='rgba(255,255,255,0.08)';this.style.borderColor='rgba(255,255,255,0.06)';this.style.background='rgba(255,255,255,0.02)'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </button>
       </div>
     </div>
   </footer>
@@ -553,19 +553,23 @@
         <span class="text-2xl font-bold" id="cart-total">€0,00</span>
       </div>
       <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2" onclick="checkout()">
-        <i data-lucide="credit-card" class="w-4 h-4"></i>
+        <i data-lucide="landmark" class="w-4 h-4"></i>
         <span>Zur Kasse</span>
       </button>
-      <p class="text-xs text-gray-600 text-center mt-3">Kostenloser Versand · Sichere Bezahlung</p>
+      <p class="text-xs text-gray-600 text-center mt-3">Kostenloser Versand · Zahlung per Überweisung</p>
     </div>
   </div>
 
   <script>
     // ===== PRODUCT DATA =====
-    const products = [
+    const products = JSON.parse(localStorage.getItem('istore-products')) || DEFAULT_PRODUCTS;
+    const siteContent = JSON.parse(localStorage.getItem('istore-site-content')) || DEFAULT_SITE_CONTENT;
+
+    /* Default data moved to data.js — editing via admin.html 
+    const DEFAULT_PRODUCTS = [
       { id: '13mini', name: 'iPhone 13 Mini', series: '13',
         colors: [
-          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Sternenlicht', hex: '#F0EDE0' },
           { name: 'Blau', hex: '#7B99BF' },
           { name: 'Pink', hex: '#F5C7C3' },
@@ -580,7 +584,7 @@
       },
       { id: '13', name: 'iPhone 13', series: '13',
         colors: [
-          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Sternenlicht', hex: '#F0EDE0' },
           { name: 'Blau', hex: '#7B99BF' },
           { name: 'Pink', hex: '#F5C7C3' },
@@ -595,6 +599,7 @@
       },
       { id: '13pro', name: 'iPhone 13 Pro', series: '13',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Graphit', hex: '#5A5A5E' },
           { name: 'Gold', hex: '#E8D5A3' },
           { name: 'Silber', hex: '#E3E3E8' },
@@ -610,6 +615,7 @@
       },
       { id: '13promax', name: 'iPhone 13 Pro Max', series: '13',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Graphit', hex: '#5A5A5E' },
           { name: 'Gold', hex: '#E8D5A3' },
           { name: 'Silber', hex: '#E3E3E8' },
@@ -625,6 +631,7 @@
       },
       { id: '14', name: 'iPhone 14', series: '14',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Mitternacht', hex: '#1C1C2E' },
           { name: 'Sternenlicht', hex: '#F0EDE0' },
           { name: 'Blau', hex: '#7B99BF' },
@@ -640,6 +647,7 @@
       },
       { id: '14plus', name: 'iPhone 14 Plus', series: '14',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Mitternacht', hex: '#1C1C2E' },
           { name: 'Sternenlicht', hex: '#F0EDE0' },
           { name: 'Blau', hex: '#7B99BF' },
@@ -655,6 +663,7 @@
       },
       { id: '14pro', name: 'iPhone 14 Pro', series: '14',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Space Schwarz', hex: '#2C2C34' },
           { name: 'Silber', hex: '#E3E3E8' },
           { name: 'Dunkellila', hex: '#5A4E6F' },
@@ -670,6 +679,7 @@
       },
       { id: '14promax', name: 'iPhone 14 Pro Max', series: '14',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Space Schwarz', hex: '#2C2C34' },
           { name: 'Silber', hex: '#E3E3E8' },
           { name: 'Dunkellila', hex: '#5A4E6F' },
@@ -715,10 +725,11 @@
       },
       { id: '15pro', name: 'iPhone 15 Pro', series: '15',
         colors: [
-          { name: 'Titan Natur', hex: '#B8A98E' },
-          { name: 'Titan Blau', hex: '#7A8B9E' },
-          { name: 'Titan Weiß', hex: '#E5E0D8' },
-          { name: 'Titan Schwarz', hex: '#474749' }
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Naturtitan', hex: '#B8A98E' },
+          { name: 'Blautitan', hex: '#7A8B9E' },
+          { name: 'Weißtitan', hex: '#E5E0D8' },
+          { name: 'Schwarztitan', hex: '#474749' }
         ],
         storageOptions: [
           { capacity: '128 GB', price: 680 },
@@ -730,10 +741,11 @@
       },
       { id: '15promax', name: 'iPhone 15 Pro Max', series: '15',
         colors: [
-          { name: 'Titan Natur', hex: '#B8A98E' },
-          { name: 'Titan Blau', hex: '#7A8B9E' },
-          { name: 'Titan Weiß', hex: '#E5E0D8' },
-          { name: 'Titan Schwarz', hex: '#474749' }
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Naturtitan', hex: '#B8A98E' },
+          { name: 'Blautitan', hex: '#7A8B9E' },
+          { name: 'Weißtitan', hex: '#E5E0D8' },
+          { name: 'Schwarztitan', hex: '#474749' }
         ],
         storageOptions: [
           { capacity: '256 GB', price: 810 },
@@ -774,6 +786,7 @@
       },
       { id: '16pro', name: 'iPhone 16 Pro', series: '16',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Wüstentitan', hex: '#C5B3A0' },
           { name: 'Titansilber', hex: '#A8A8AB' },
           { name: 'Weißtitan', hex: '#EAE5DB' },
@@ -789,6 +802,7 @@
       },
       { id: '16promax', name: 'iPhone 16 Pro Max', series: '16',
         colors: [
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Wüstentitan', hex: '#C5B3A0' },
           { name: 'Titansilber', hex: '#A8A8AB' },
           { name: 'Weißtitan', hex: '#EAE5DB' },
@@ -803,7 +817,7 @@
       },
       { id: '17', name: 'iPhone 17', series: '17',
         colors: [
-          { name: 'Mitternacht', hex: '#1C1C2E' },
+          { name: 'Schwarz', hex: '#1D1D1F' },
           { name: 'Sternenlicht', hex: '#F0EDE0' },
           { name: 'Blau', hex: '#7B99BF' },
           { name: 'Grün', hex: '#ACD0B0' },
@@ -818,9 +832,10 @@
       },
       { id: '17pro', name: 'iPhone 17 Pro', series: '17',
         colors: [
-          { name: 'Titan Dunkel', hex: '#474749' },
-          { name: 'Titan Natur', hex: '#B8A98E' },
-          { name: 'Titan Weiß', hex: '#E5E0D8' }
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Silber', hex: '#E3E3E8' },
+          { name: 'Orange', hex: '#E87C3E' },
+          { name: 'Dunkelblau', hex: '#3D2D6B' }
         ],
         storageOptions: [
           { capacity: '256 GB', price: 1080 },
@@ -831,9 +846,10 @@
       },
       { id: '17promax', name: 'iPhone 17 Pro Max', series: '17',
         colors: [
-          { name: 'Titan Natur', hex: '#B8A98E' },
-          { name: 'Titan Dunkel', hex: '#474749' },
-          { name: 'Titan Weiß', hex: '#E5E0D8' }
+          { name: 'Schwarz', hex: '#1D1D1F' },
+          { name: 'Silber', hex: '#E3E3E8' },
+          { name: 'Orange', hex: '#E87C3E' },
+          { name: 'Dunkelblau', hex: '#3D2D6B' }
         ],
         storageOptions: [
           { capacity: '256 GB', price: 1150 },
@@ -843,12 +859,41 @@
         img: 'https://media.base44.com/images/public/69d963127f5111c68c96666d/8e597a72a_photo_2026-04-13_10-26-11.jpg'
       },
     ];
+    */
+
+    // ===== CATEGORIES =====
+    let categories = JSON.parse(localStorage.getItem('istore-categories')) || JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+
+    function renderFilterPills() {
+      // Auto-add any series from products not in categories
+      const productSeries = [...new Set(products.map(p => p.series))];
+      productSeries.forEach(s => {
+        if (!categories.find(c => c.id === s)) {
+          categories.push({ id: s, label: s.match(/^\d+$/) ? 'iPhone ' + s : s.charAt(0).toUpperCase() + s.slice(1), icon: 'smartphone' });
+        }
+      });
+
+      const container = document.getElementById('filter-container');
+      if (!container) return;
+
+      let html = `<button class="filter-pill ${currentFilter === 'all' ? 'active' : ''} px-5 py-2.5 rounded-full text-sm font-medium border border-white/10" data-filter="all" onclick="setFilter('all', this)">Alle</button>`;
+
+      categories.forEach(cat => {
+        const isActive = currentFilter === cat.id;
+        html += `<button class="filter-pill ${isActive ? 'active' : ''} px-5 py-2.5 rounded-full text-sm font-medium border border-white/10 ${!isActive ? 'text-gray-400' : ''}" data-filter="${cat.id}" onclick="setFilter('${cat.id}', this)">${cat.label}</button>`;
+      });
+
+      container.innerHTML = html;
+    }
 
     // ===== STATE =====
     let currentFilter = 'all';
     let currentSearch = '';
     let currentSort = 'default';
     let cart = [];
+
+    // IBAN Bank Transfer Payment (no Stripe needed)
+    let currentOrderRef = '';
 
     // ===== FORMAT PRICE =====
     function formatPrice(price) {
@@ -1195,7 +1240,7 @@
           <div class="p-6 sm:p-8">
             <div class="flex items-center justify-between mb-6">
               <h2 class="text-2xl font-bold flex items-center gap-2">
-                <i data-lucide="credit-card" class="w-6 h-6 text-blue-400"></i>
+                <i data-lucide="landmark" class="w-6 h-6 text-blue-400"></i>
                 Bestellung abschließen
               </h2>
               <button onclick="closeCheckoutModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
@@ -1233,7 +1278,7 @@
               <div class="flex-1 h-px bg-white/10"></div>
               <div class="step-dot flex items-center gap-2" data-step="2">
                 <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-500">2</div>
-                <span class="text-xs font-medium text-gray-500">Zahlung</span>
+                <span class="text-xs font-medium text-gray-500">Überweisung</span>
               </div>
               <div class="flex-1 h-px bg-white/10"></div>
               <div class="step-dot flex items-center gap-2" data-step="3">
@@ -1286,62 +1331,64 @@
               </button>
             </div>
 
-            <!-- Step 2: Payment Info -->
+            <!-- Step 2: Payment -->
             <div id="checkout-step-2" class="hidden">
-              <h3 class="font-semibold mb-2 text-lg">Zahlungsinformationen</h3>
-              <p class="text-sm text-gray-400 mb-6">Bitte überweise den Gesamtbetrag an folgende Bankverbindung:</p>
+              <h3 class="font-semibold mb-2 text-lg">Banküberweisung</h3>
+              <p class="text-sm text-gray-400 mb-6">Überweise den Betrag an folgende Bankverbindung</p>
 
-              <div class="bg-white/5 rounded-2xl p-5 border border-white/10 mb-6 space-y-4">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs text-gray-500 uppercase tracking-wider">Empfänger</span>
-                  <button onclick="copyToClipboard('iShopStock Gewerbe r.', this)" class="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
-                    <i data-lucide="copy" class="w-3 h-3"></i> Kopieren
-                  </button>
+              <!-- Bank details card -->
+              <div class="bg-white/5 rounded-2xl p-5 border border-white/10 mb-4 space-y-3">
+                <div class="flex items-center gap-2 mb-1">
+                  <i data-lucide="landmark" class="w-5 h-5 text-blue-400"></i>
+                  <span class="font-semibold">Bankverbindung</span>
                 </div>
-                <p class="font-bold text-lg" id="payment-recipient">iStoreStock Gewerbe r.</p>
-
-                <div class="h-px bg-white/5"></div>
-
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Kontoinhaber</span>
+                  <p class="text-sm font-medium mt-1" id="iban-holder"></p>
+                </div>
                 <div>
                   <span class="text-xs text-gray-500 uppercase tracking-wider">IBAN</span>
-                  <div class="flex items-center justify-between mt-1">
-                    <p class="font-mono font-semibold text-base tracking-wide" id="payment-iban">DE69506700240060350605</p>
-                    <button onclick="copyToClipboard('DE69506700240060350605', this)" class="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
+                  <div class="flex items-center gap-2 mt-1">
+                    <p class="text-sm font-mono font-medium" id="iban-number"></p>
+                    <button onclick="copyToClipboard(document.getElementById('iban-number').textContent, this)" class="text-[10px] text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
                       <i data-lucide="copy" class="w-3 h-3"></i> Kopieren
                     </button>
                   </div>
                 </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">BIC</span>
+                  <p class="text-sm font-mono font-medium mt-1" id="iban-bic"></p>
+                </div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Bank</span>
+                  <p class="text-sm font-medium mt-1" id="iban-bank"></p>
+                </div>
+              </div>
 
+              <!-- Amount and reference -->
+              <div class="bg-white/5 rounded-2xl p-5 border border-white/10 mb-4 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-400">Zu überweisen</span>
+                  <span class="text-xl font-black price-tag">${formatPrice(total)}</span>
+                </div>
                 <div class="h-px bg-white/5"></div>
-
                 <div>
                   <span class="text-xs text-gray-500 uppercase tracking-wider">Verwendungszweck</span>
-                  <div class="flex items-center justify-between mt-1">
-                    <p class="font-mono font-bold text-base text-amber-400" id="payment-code">HL855219012T</p>
-                    <button onclick="copyToClipboard('HL855219012T', this)" class="text-[10px] text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
+                  <div class="flex items-center gap-2 mt-1">
+                    <p class="text-sm font-mono font-bold text-blue-400" id="order-ref"></p>
+                    <button onclick="copyToClipboard(document.getElementById('order-ref').textContent, this)" class="text-[10px] text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
                       <i data-lucide="copy" class="w-3 h-3"></i> Kopieren
                     </button>
                   </div>
                 </div>
-
-                <div class="h-px bg-white/5"></div>
-
-                <div>
-                  <span class="text-xs text-gray-500 uppercase tracking-wider">Betrag</span>
-                  <p class="font-black text-2xl price-tag mt-1">${formatPrice(total)}</p>
-                </div>
               </div>
 
+              <!-- Important note -->
               <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
-                <i data-lucide="alert-circle" class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5"></i>
+                <i data-lucide="info" class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5"></i>
                 <div class="text-xs text-amber-200/80 leading-relaxed">
-                  <strong>Wichtig:</strong> Bitte überweise den Betrag an <strong class="text-amber-400">iStoreStock Gewerbe r.</strong> und verwende den Code <strong class="text-amber-400 font-mono">HL855219012T</strong> als Verwendungszweck. Ohne diesen Code kann die Zahlung nicht zugeordnet werden.
+                  Bitte überweise den Betrag innerhalb von <strong class="text-amber-300">7 Tagen</strong> an die oben angegebene Bankverbindung. Gib den Verwendungszweck an. Die Bestellung wird nach Zahlungseingang versendet.
                 </div>
-              </div>
-
-              <div class="flex items-center gap-2 mb-6">
-                <input type="checkbox" id="payment-confirm" class="w-4 h-4 rounded accent-blue-500">
-                <label for="payment-confirm" class="text-sm text-gray-400">Ich bestätige, dass ich die Überweisung durchgeführt habe</label>
               </div>
 
               <div class="flex gap-3">
@@ -1349,9 +1396,9 @@
                   <i data-lucide="arrow-left" class="w-4 h-4"></i>
                   <span>Zurück</span>
                 </button>
-                <button onclick="goToStep3()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2">
-                  <span>Bestellung bestätigen</span>
+                <button onclick="confirmOrder()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2">
                   <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>Bestellung bestätigen</span>
                 </button>
               </div>
             </div>
@@ -1380,6 +1427,11 @@
                 <div>
                   <span class="text-xs text-gray-500 uppercase tracking-wider">Rechnung an</span>
                   <p class="text-sm mt-1" id="confirm-email"></p>
+                </div>
+                <div class="h-px bg-white/5"></div>
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wider">Zahlungsmethode</span>
+                  <p class="text-sm mt-1 flex items-center gap-1.5"><i data-lucide="landmark" class="w-3.5 h-3.5 text-blue-400"></i> Banküberweisung (IBAN)</p>
                 </div>
               </div>
 
@@ -1420,11 +1472,22 @@
                 </div>
               </div>
 
+              <!-- Bank transfer info -->
+              <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <i data-lucide="landmark" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs text-blue-200/80 leading-relaxed">
+                  Bitte überweise <strong class="text-blue-300" id="confirm-amount"></strong> an:<br>
+                  <strong class="text-blue-300" id="confirm-iban"></strong><br>
+                  Verwendungszweck: <strong class="text-blue-300" id="confirm-ref"></strong><br>
+                  Die Bestellung wird nach Zahlungseingang innerhalb von 7 Werktagen versendet.
+                </div>
+              </div>
+
               <!-- Email confirmation note -->
               <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
                 <i data-lucide="mail-check" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
                 <div class="text-xs text-green-200/80 leading-relaxed">
-                  Eine Bestellbestätigung mit der Rechnung wurde an <strong class="text-green-300" id="confirm-email-receipt"></strong> gesendet.
+                  Eine Bestellbestätigung wurde an <strong class="text-green-300" id="confirm-email-receipt"></strong> gesendet.
                 </div>
               </div>
 
@@ -1456,21 +1519,21 @@
       document.getElementById('checkout-step-1').classList.add('hidden');
       document.getElementById('checkout-step-2').classList.remove('hidden');
       updateStepIndicator(2);
+
+      // Generate order reference and fill IBAN details
+      currentOrderRef = 'IS-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+      document.getElementById('order-ref').textContent = currentOrderRef;
+      document.getElementById('iban-holder').textContent = siteContent.accountHolder || DEFAULT_SITE_CONTENT.accountHolder;
+      document.getElementById('iban-number').textContent = siteContent.iban || DEFAULT_SITE_CONTENT.iban;
+      document.getElementById('iban-bic').textContent = siteContent.bic || DEFAULT_SITE_CONTENT.bic;
+      document.getElementById('iban-bank').textContent = siteContent.bankName || DEFAULT_SITE_CONTENT.bankName;
     }
 
-    function goBackToStep1() {
-      document.getElementById('checkout-step-2').classList.add('hidden');
-      document.getElementById('checkout-step-1').classList.remove('hidden');
-      updateStepIndicator(1);
+    function confirmOrder() {
+      completeOrder();
     }
 
-    function goToStep3() {
-      const confirm = document.getElementById('payment-confirm');
-      if (!confirm || !confirm.checked) {
-        showToast('Bitte bestätige die Überweisung', 'info');
-        return;
-      }
-
+    function completeOrder() {
       const firstname = document.getElementById('checkout-firstname').value.trim();
       const lastname = document.getElementById('checkout-lastname').value.trim();
       const street = document.getElementById('checkout-street').value.trim();
@@ -1478,13 +1541,22 @@
       const city = document.getElementById('checkout-city').value.trim();
       const email = document.getElementById('checkout-email').value.trim();
 
-      const orderNum = 'IS-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+      const orderNum = currentOrderRef || 'IS-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+      const total = cart.reduce((s, i) => s + i.unitPrice * i.qty, 0);
 
       document.getElementById('order-number').textContent = orderNum;
       document.getElementById('confirm-name').textContent = firstname + ' ' + lastname;
       document.getElementById('confirm-address').innerHTML = firstname + ' ' + lastname + '<br>' + street + '<br>' + zip + ' ' + city;
       document.getElementById('confirm-email').textContent = email;
       document.getElementById('confirm-email-receipt').textContent = email;
+
+      // Bank transfer details in confirmation
+      const confirmAmount = document.getElementById('confirm-amount');
+      if (confirmAmount) confirmAmount.textContent = formatPrice(total);
+      const confirmIban = document.getElementById('confirm-iban');
+      if (confirmIban) confirmIban.textContent = (siteContent.iban || DEFAULT_SITE_CONTENT.iban) + ' · BIC: ' + (siteContent.bic || DEFAULT_SITE_CONTENT.bic);
+      const confirmRef = document.getElementById('confirm-ref');
+      if (confirmRef) confirmRef.textContent = orderNum;
 
       document.getElementById('checkout-step-2').classList.add('hidden');
       document.getElementById('checkout-step-3').classList.remove('hidden');
@@ -1493,8 +1565,16 @@
       // Clear cart
       cart = [];
       updateCartUI();
-      showToast('Bestellung erfolgreich aufgegeben!', 'success');
+      showToast('Bestellung aufgegeben! Bitte überweise den Betrag.', 'success');
     }
+
+    function goBackToStep1() {
+      document.getElementById('checkout-step-2').classList.add('hidden');
+      document.getElementById('checkout-step-1').classList.remove('hidden');
+      updateStepIndicator(1);
+    }
+
+    
 
     function updateStepIndicator(step) {
       document.querySelectorAll('.step-dot').forEach(dot => {
@@ -1648,23 +1728,123 @@
       }
     }
 
+    // ===== APPLY SITE CONTENT =====
+    function applySiteContent() {
+      const sc = siteContent;
+      // Hero
+      const badge = document.getElementById('site-badge-text');
+      if (badge) badge.textContent = sc.heroBadge;
+      const heroTitle1 = document.getElementById('site-hero-title1');
+      if (heroTitle1) heroTitle1.textContent = sc.heroTitle1;
+      const heroTitle2 = document.getElementById('site-hero-title2');
+      if (heroTitle2) heroTitle2.textContent = sc.heroTitle2;
+      const heroDesc = document.getElementById('site-hero-desc');
+      if (heroDesc) heroDesc.innerHTML = sc.heroDesc + '<br class="hidden sm:block"><span class="text-white font-medium">' + sc.heroHighlight + '</span> · ' + sc.heroDelivery;
+      const counter1Label = document.getElementById('site-counter1-label');
+      if (counter1Label) counter1Label.textContent = sc.counter1Label;
+      const counter2Label = document.getElementById('site-counter2-label');
+      if (counter2Label) counter2Label.textContent = sc.counter2Label;
+      // Sections
+      const sectionTitle = document.getElementById('site-section-title');
+      if (sectionTitle) sectionTitle.textContent = sc.sectionTitle;
+      const sectionDesc = document.getElementById('site-section-desc');
+      if (sectionDesc) sectionDesc.textContent = sc.sectionDesc;
+      const benefitsTitle = document.getElementById('site-benefits-title');
+      if (benefitsTitle) benefitsTitle.textContent = sc.benefitsTitle;
+      const benefitsDesc = document.getElementById('site-benefits-desc');
+      if (benefitsDesc) benefitsDesc.textContent = sc.benefitsDesc;
+      const ctaTitle = document.getElementById('site-cta-title');
+      if (ctaTitle) ctaTitle.textContent = sc.ctaTitle;
+      const ctaDesc = document.getElementById('site-cta-desc');
+      if (ctaDesc) ctaDesc.textContent = sc.ctaDesc;
+      // Contact
+      document.querySelectorAll('.site-contact-email').forEach(el => {
+        el.textContent = sc.contactEmail;
+        if (el.tagName === 'A') el.href = 'mailto:' + sc.contactEmail;
+      });
+      document.querySelectorAll('.site-contact-phone').forEach(el => {
+        el.textContent = sc.contactPhone;
+        if (el.tagName === 'A') el.href = 'tel:+49' + sc.contactPhone;
+      });
+      // Footer
+      const footerCopyright = document.getElementById('site-footer-copyright');
+      if (footerCopyright) footerCopyright.textContent = sc.footerCopyright;
+      // Update counter target
+      const counter1 = document.getElementById('counter-1');
+      if (counter1) {
+        const parent = counter1.parentElement;
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateCounter('counter-1', sc.counter1Value);
+              observer.disconnect();
+            }
+          });
+        });
+        observer.observe(counter1);
+      }
+    }
+
     // ===== INIT =====
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       createParticles();
+      applySiteContent();
+      renderFilterPills();
       renderProducts();
       observeReveal();
 
-      // Animate counters when hero is visible
-      const heroObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animateCounter('counter-1', 19);
-            animateCounter('counter-2', 26);
-            heroObserver.disconnect();
-          }
-        });
-      });
-      heroObserver.observe(document.getElementById('counter-1'));
+      // Counters animated by applySiteContent
     });
   </script>
+<!-- Sentry Login Modal -->
+  <div id="sentry-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(20px);align-items:center;justify-content:center;">
+    <div style="background:#1d1d1f;border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;max-width:380px;width:90%;text-align:center;animation:sentrySlide 0.3s cubic-bezier(0.23,1,0.32,1);">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3 style="font-family:Inter,sans-serif;font-size:20px;font-weight:700;color:white;margin-bottom:6px;">Sentry</h3>
+      <p style="font-family:Inter,sans-serif;font-size:13px;color:#666;margin-bottom:24px;">Authentifizierung erforderlich</p>
+      <div style="position:relative;margin-bottom:16px;">
+        <input id="sentry-code" type="password" placeholder="Zugangscode eingeben" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 16px;color:white;font-size:15px;outline:none;font-family:Inter,sans-serif;transition:border-color 0.2s;" onfocus="this.style.borderColor='rgba(59,130,246,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" onkeydown="if(event.key==='Enter')sentryVerify()">
+      </div>
+      <p id="sentry-error" style="display:none;font-family:Inter,sans-serif;font-size:12px;color:#ef4444;margin-bottom:12px;">Ungültiger Code. Zugriff verweigert.</p>
+      <button onclick="sentryVerify()" style="width:100%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border:none;color:white;font-family:Inter,sans-serif;font-weight:600;font-size:14px;padding:14px;border-radius:12px;cursor:pointer;transition:transform 0.2s,opacity 0.2s;" onmouseenter="this.style.transform='scale(1.02)'" onmouseleave="this.style.transform='scale(1)'">Zugang bestätigen</button>
+      <button onclick="sentryClose()" style="margin-top:10px;background:none;border:none;color:#666;font-family:Inter,sans-serif;font-size:12px;cursor:pointer;padding:8px 16px;transition:color 0.2s;" onmouseenter="this.style.color='#999'" onmouseleave="this.style.color='#666'">Abbrechen</button>
+    </div>
+  </div>
+
+  <style>
+    @keyframes sentrySlide { from { opacity:0; transform:translateY(20px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+  </style>
+
+  <script>
+    function sentryChallenge() {
+      const modal = document.getElementById('sentry-modal');
+      modal.style.display = 'flex';
+      setTimeout(() => document.getElementById('sentry-code').focus(), 100);
+    }
+    function sentryVerify() {
+      const code = document.getElementById('sentry-code').value;
+      if (code === 'sysAdmin1928') {
+        sessionStorage.setItem('admin-auth', 'true');
+        window.location.href = 'admin.html';
+      } else {
+        const errEl = document.getElementById('sentry-error');
+        errEl.style.display = 'block';
+        const input = document.getElementById('sentry-code');
+        input.style.borderColor = 'rgba(239,68,68,0.5)';
+        input.value = '';
+        setTimeout(() => { input.style.borderColor = 'rgba(255,255,255,0.1)'; }, 2000);
+      }
+    }
+    function sentryClose() {
+      document.getElementById('sentry-modal').style.display = 'none';
+      document.getElementById('sentry-code').value = '';
+      document.getElementById('sentry-error').style.display = 'none';
+    }
+  </script>
+  <script src="visual-editor.js"></script>
+  <script src="https://deepsite.hf.co/deepsite-badge.js"></script>
+</body>
+</html>
