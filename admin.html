@@ -52,6 +52,10 @@
             <i data-lucide="external-link" class="w-4 h-4"></i>
             <span class="hidden sm:inline">Site anzeigen</span>
           </a>
+          <button onclick="activateVisualEditor()" id="ve-activate-btn" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/5 border border-white/10">
+            <i data-lucide="pencil" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Editor Vizual</span>
+          </button>
           <button onclick="exportSite()" class="inline-flex items-center gap-2 text-sm bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-all">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span class="hidden sm:inline">Export HTML</span>
@@ -1175,11 +1179,50 @@
       showToast('Bestellung gelöscht', 'success');
     }
 
+    // ===== VISUAL EDITOR ACTIVATION =====
+    const VE_SECRET_CODE = '1929';
+
+    function activateVisualEditor() {
+      if (sessionStorage.getItem('visual-editor-auth')) {
+        // Already activated — toggle off
+        sessionStorage.removeItem('visual-editor-auth');
+        updateVEButton();
+        showToast('Editor Vizual deaktiviert', 'info');
+        return;
+      }
+
+      const code = prompt('🔒 Cod secret pentru Editor Vizual:');
+      if (code === null) return; // Cancelled
+
+      if (code === VE_SECRET_CODE) {
+        sessionStorage.setItem('visual-editor-auth', 'true');
+        updateVEButton();
+        showToast('✅ Editor Vizual activat! Mergi pe site pentru a folosi editorul.', 'success');
+      } else {
+        showToast('❌ Cod invalid. Acces refuzat.', 'error');
+      }
+    }
+
+    function updateVEButton() {
+      const btn = document.getElementById('ve-activate-btn');
+      if (!btn) return;
+      const isActive = sessionStorage.getItem('visual-editor-auth');
+      if (isActive) {
+        btn.className = 'inline-flex items-center gap-2 text-sm text-green-400 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/30';
+        btn.innerHTML = '<i data-lucide="pencil" class="w-4 h-4"></i><span class="hidden sm:inline">Editor ON</span>';
+      } else {
+        btn.className = 'inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/5 border border-white/10';
+        btn.innerHTML = '<i data-lucide="pencil" class="w-4 h-4"></i><span class="hidden sm:inline">Editor Vizual</span>';
+      }
+      lucide.createIcons();
+    }
+
     // ===== INIT =====
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       renderProductList();
       renderCategoryList();
+      updateVEButton();
     });
   </script>
 </body>

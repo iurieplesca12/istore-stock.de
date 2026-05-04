@@ -2,9 +2,9 @@
 // Editor vizual integrat — activat DOAR după autentificarea admin
 
 (function() {
-  // 🔒 Verifică autentificarea — doar după codul secret
-  if (!sessionStorage.getItem('admin-auth')) {
-    return; // Nu crea editorul dacă nu e autentificat
+  // 🔒 Verifică autentificarea — doar după codul secret din admin
+  if (!sessionStorage.getItem('visual-editor-auth')) {
+    return; // Nu crea editorul dacă nu e activat din admin
   }
 
   let editMode = false;
