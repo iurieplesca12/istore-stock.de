@@ -77,6 +77,9 @@
         <button onclick="switchTab('export')" id="tab-export" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 border border-transparent transition-all whitespace-nowrap hover:text-gray-300">
           <i data-lucide="file-down" class="w-4 h-4"></i> Export
         </button>
+        <button onclick="switchTab('orders')" id="tab-orders" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-400 border border-transparent transition-all whitespace-nowrap hover:text-gray-300">
+          <i data-lucide="receipt" class="w-4 h-4"></i> Bestellungen
+        </button>
       </div>
     </div>
   </div>
@@ -394,6 +397,50 @@
         </div>
       </div>
     </div>
+
+    <!-- ===== ORDERS TAB ===== -->
+    <div id="panel-orders" class="hidden">
+      <!-- Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+          <div class="text-2xl font-black" id="stat-orders-total">0</div>
+          <div class="text-xs text-gray-500 mt-1">Bestellungen</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+          <div class="text-2xl font-black text-amber-400" id="stat-orders-pending">0</div>
+          <div class="text-xs text-gray-500 mt-1">Ausstehend</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+          <div class="text-2xl font-black text-purple-400" id="stat-orders-shipped">0</div>
+          <div class="text-xs text-gray-500 mt-1">Versendet</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+          <div class="text-2xl font-black text-green-400" id="stat-orders-revenue">€0</div>
+          <div class="text-xs text-gray-500 mt-1">Umsatz (gesamt)</div>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <div class="relative flex-1 sm:flex-none">
+            <i data-lucide="search" class="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input id="order-search" type="text" placeholder="Bestellung suchen..." oninput="renderOrderList()" class="w-full sm:w-64 bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white outline-none focus:border-blue-500/50 transition-colors">
+          </div>
+          <select id="order-filter-status" onchange="renderOrderList()" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-gray-300 outline-none cursor-pointer">
+            <option value="all">Alle Status</option>
+            <option value="pending">Ausstehend</option>
+            <option value="paid">Bezahlt</option>
+            <option value="shipped">Versendet</option>
+            <option value="delivered">Geliefert</option>
+          </select>
+        </div>
+        <span class="text-sm text-gray-500" id="order-count">0 Bestellungen</span>
+      </div>
+
+      <!-- Order List -->
+      <div id="order-list" class="space-y-3"></div>
+    </div>
   </main>
 
   <!-- Product Editor Modal -->
@@ -434,10 +481,11 @@
     let siteContent = JSON.parse(localStorage.getItem('istore-site-content')) || JSON.parse(JSON.stringify(DEFAULT_SITE_CONTENT));
     let categories = JSON.parse(localStorage.getItem('istore-categories')) || JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
     let editingProductId = null;
+    let orders = JSON.parse(localStorage.getItem('istore-orders')) || [];
 
     // ===== TABS =====
     function switchTab(tab) {
-      ['products', 'categories', 'content', 'export'].forEach(t => {
+      ['products', 'categories', 'content', 'export', 'orders'].forEach(t => {
         const panel = document.getElementById('panel-' + t);
         const tabBtn = document.getElementById('tab-' + t);
         if (t === tab) {
@@ -452,6 +500,7 @@
       });
       if (tab === 'content') loadSiteContentToForm();
       if (tab === 'categories') renderCategoryList();
+      if (tab === 'orders') renderOrderList();
       lucide.createIcons();
     }
 
@@ -940,12 +989,15 @@
       localStorage.removeItem('istore-products');
       localStorage.removeItem('istore-site-content');
       localStorage.removeItem('istore-categories');
+      localStorage.removeItem('istore-orders');
       products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
       siteContent = JSON.parse(JSON.stringify(DEFAULT_SITE_CONTENT));
       categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+      orders = [];
       renderProductList();
       loadSiteContentToForm();
       renderCategoryList();
+      renderOrderList();
       showToast('Auf Standardwerte zurückgesetzt', 'success');
     }
 
@@ -963,6 +1015,164 @@
       container.classList.remove('hidden');
       lucide.createIcons();
       setTimeout(() => container.classList.add('hidden'), 3000);
+    }
+
+    // ===== ORDERS =====
+    function renderOrderList() {
+      orders = JSON.parse(localStorage.getItem('istore-orders')) || [];
+
+      const search = (document.getElementById('order-search')?.value || '').toLowerCase();
+      const statusFilter = document.getElementById('order-filter-status')?.value || 'all';
+
+      let filtered = orders.filter(o => {
+        const matchSearch = !search ||
+          o.id.toLowerCase().includes(search) ||
+          (o.customer.firstname + ' ' + o.customer.lastname).toLowerCase().includes(search) ||
+          o.customer.email.toLowerCase().includes(search);
+        const matchStatus = statusFilter === 'all' || o.status === statusFilter;
+        return matchSearch && matchStatus;
+      });
+
+      // Update stats
+      document.getElementById('stat-orders-total').textContent = orders.length;
+      document.getElementById('stat-orders-pending').textContent = orders.filter(o => o.status === 'pending').length;
+      document.getElementById('stat-orders-shipped').textContent = orders.filter(o => o.status === 'shipped' || o.status === 'delivered').length;
+      const revenue = orders.reduce((s, o) => s + o.total, 0);
+      document.getElementById('stat-orders-revenue').textContent = '€' + revenue.toLocaleString('de-DE', { minimumFractionDigits: 0 });
+      document.getElementById('order-count').textContent = filtered.length + ' Bestellung' + (filtered.length !== 1 ? 'en' : '');
+
+      const listEl = document.getElementById('order-list');
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<div class="text-center py-16 text-gray-500">Keine Bestellungen gefunden</div>';
+        lucide.createIcons();
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(o => {
+        const statusConfig = {
+          pending: { label: 'Ausstehend', bg: 'bg-amber-500/20', text: 'text-amber-400', dot: 'bg-amber-400' },
+          paid: { label: 'Bezahlt', bg: 'bg-blue-500/20', text: 'text-blue-400', dot: 'bg-blue-400' },
+          shipped: { label: 'Versendet', bg: 'bg-purple-500/20', text: 'text-purple-400', dot: 'bg-purple-400' },
+          delivered: { label: 'Geliefert', bg: 'bg-green-500/20', text: 'text-green-400', dot: 'bg-green-400' }
+        };
+        const sc = statusConfig[o.status] || statusConfig.pending;
+        const date = new Date(o.date);
+        const dateStr = date.toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' });
+        const timeStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        const escId = o.id.replace(/'/g, "\\'");
+
+        return `
+          <div class="bg-white/[0.02] border border-white/5 rounded-xl overflow-hidden">
+            <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-white/[0.03] transition-colors" onclick="toggleOrderDetail('${escId}')">
+              <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="receipt" class="w-4 h-4 text-gray-400"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <span class="font-semibold text-sm font-mono">${o.id}</span>
+                  <span class="${sc.bg} ${sc.text} text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 ${sc.dot} rounded-full"></span>
+                    ${sc.label}
+                  </span>
+                </div>
+                <div class="text-xs text-gray-500">${o.customer.firstname} ${o.customer.lastname} · ${dateStr} ${timeStr} · ${o.items.length} Artikel</div>
+              </div>
+              <div class="text-right flex-shrink-0">
+                <div class="font-bold text-sm">€${o.total.toLocaleString('de-DE', { minimumFractionDigits: 2 })}</div>
+              </div>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 transition-transform flex-shrink-0" id="order-chevron-${CSS.escape(o.id)}"></i>
+            </div>
+
+            <div id="order-detail-${CSS.escape(o.id)}" class="hidden border-t border-white/5">
+              <div class="p-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5">
+                  <div>
+                    <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium">Kunde</h4>
+                    <div class="space-y-2 text-sm">
+                      <div class="flex items-center gap-2"><i data-lucide="user" class="w-3.5 h-3.5 text-gray-500"></i><span>${o.customer.firstname} ${o.customer.lastname}</span></div>
+                      <div class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-gray-500"></i><span class="text-blue-400">${o.customer.email}</span></div>
+                      ${o.customer.phone ? `<div class="flex items-center gap-2"><i data-lucide="phone" class="w-3.5 h-3.5 text-gray-500"></i><span>${o.customer.phone}</span></div>` : ''}
+                      <div class="flex items-start gap-2"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-500 mt-0.5"></i><span class="text-gray-400">${o.customer.street}<br>${o.customer.zip} ${o.customer.city}</span></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium">Bestelldetails</h4>
+                    <div class="space-y-2 text-sm">
+                      <div class="flex items-center gap-2"><i data-lucide="hash" class="w-3.5 h-3.5 text-gray-500"></i><span class="font-mono">${o.id}</span></div>
+                      <div class="flex items-center gap-2"><i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-500"></i><span>${dateStr} ${timeStr}</span></div>
+                      <div class="flex items-center gap-2"><i data-lucide="landmark" class="w-3.5 h-3.5 text-gray-500"></i><span>Banküberweisung</span></div>
+                      <div class="flex items-center gap-2"><i data-lucide="tag" class="w-3.5 h-3.5 text-gray-500"></i><span class="${sc.text} font-medium">${sc.label}</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-3 font-medium">Artikel</h4>
+                <div class="space-y-2 mb-5">
+                  ${o.items.map(item => `
+                  <div class="flex items-center gap-3 bg-white/[0.03] rounded-lg p-3">
+                    ${item.img ? `<img src="${item.img}" alt="${item.name}" class="w-10 h-10 object-contain rounded bg-white/5 flex-shrink-0">` : '<div class="w-10 h-10 rounded bg-white/5 flex-shrink-0 flex items-center justify-center"><i data-lucide="smartphone" class="w-4 h-4 text-gray-600"></i></div>'}
+                    <div class="flex-1 min-w-0">
+                      <span class="text-sm font-medium">${item.name}</span>
+                      <div class="text-xs text-gray-500">${item.storage} · ${item.color}${item.qty > 1 ? ' × ' + item.qty : ''}</div>
+                    </div>
+                    <span class="text-sm font-semibold flex-shrink-0">€${(item.price * item.qty).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</span>
+                  </div>
+                  `).join('')}
+                </div>
+
+                <div class="flex items-center justify-between bg-white/[0.03] rounded-lg p-3 mb-5">
+                  <span class="font-semibold">Gesamt</span>
+                  <span class="text-lg font-black">€${o.total.toLocaleString('de-DE', { minimumFractionDigits: 2 })}</span>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  <span class="text-xs text-gray-500 mr-1 self-center">Status:</span>
+                  ${o.status !== 'paid' ? `<button onclick="updateOrderStatus('${escId}', 'paid')" class="text-xs bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Bezahlt</button>` : ''}
+                  ${o.status !== 'shipped' ? `<button onclick="updateOrderStatus('${escId}', 'shipped')" class="text-xs bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center gap-1"><i data-lucide="truck" class="w-3 h-3"></i> Versendet</button>` : ''}
+                  ${o.status !== 'delivered' ? `<button onclick="updateOrderStatus('${escId}', 'delivered')" class="text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center gap-1"><i data-lucide="package-check" class="w-3 h-3"></i> Geliefert</button>` : ''}
+                  ${o.status !== 'pending' ? `<button onclick="updateOrderStatus('${escId}', 'pending')" class="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Ausstehend</button>` : ''}
+                  <button onclick="deleteOrder('${escId}')" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 font-medium px-3 py-2 rounded-lg transition-colors inline-flex items-center gap-1"><i data-lucide="trash-2" class="w-3 h-3"></i> Löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function toggleOrderDetail(id) {
+      const detail = document.getElementById('order-detail-' + CSS.escape(id));
+      const chevron = document.getElementById('order-chevron-' + CSS.escape(id));
+      if (!detail) return;
+      if (detail.classList.contains('hidden')) {
+        detail.classList.remove('hidden');
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      } else {
+        detail.classList.add('hidden');
+        if (chevron) chevron.style.transform = '';
+      }
+    }
+
+    function updateOrderStatus(id, status) {
+      const idx = orders.findIndex(o => o.id === id);
+      if (idx === -1) return;
+      orders[idx].status = status;
+      localStorage.setItem('istore-orders', JSON.stringify(orders));
+      renderOrderList();
+      const statusLabels = { pending: 'Ausstehend', paid: 'Bezahlt', shipped: 'Versendet', delivered: 'Geliefert' };
+      showToast('Status: ' + (statusLabels[status] || status), 'success');
+    }
+
+    function deleteOrder(id) {
+      const order = orders.find(o => o.id === id);
+      if (!order) return;
+      if (!confirm('Bestellung "' + order.id + '" wirklich löschen?')) return;
+      orders = orders.filter(o => o.id !== id);
+      localStorage.setItem('istore-orders', JSON.stringify(orders));
+      renderOrderList();
+      showToast('Bestellung gelöscht', 'success');
     }
 
     // ===== INIT =====
